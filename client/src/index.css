@@ -1,0 +1,151 @@
+@import "tailwindcss";
+
+@theme {
+  --color-art-black: #000000;
+  --color-art-white: #ffffff;
+  --color-art-zinc: #121212;
+  --color-art-gray: #f5f5f5;
+  --color-acid-yellow: #CCFF00;
+  --color-acid-lime: #a3ff00;
+  --color-electric-cyan: #00ffff;
+  --color-hot-pink: #ff00ff;
+
+  --font-display: 'Inter', system-ui, sans-serif;
+  --font-body: 'Inter', system-ui, sans-serif;
+
+  --animate-float: float 6s ease-in-out infinite;
+  --animate-marquee: marquee 20s linear infinite;
+  --animate-slide-up: slideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  --animate-slide-in-right: slideInRight 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  --animate-pulse-fast: pulse 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+
+  @keyframes float {
+
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+
+    50% {
+      transform: translateY(-20px);
+    }
+  }
+
+  @keyframes marquee {
+    0% {
+      transform: translateX(0);
+    }
+
+    100% {
+      transform: translateX(-100%);
+    }
+  }
+
+  @keyframes slideUp {
+    from {
+      opacity: 0;
+      transform: translateY(40px);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes slideInRight {
+    from {
+      opacity: 0;
+      transform: translateX(100px);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+}
+
+@layer base {
+  body {
+    @apply bg-art-white text-art-black antialiased font-body overflow-x-hidden selection:bg-acid-yellow selection:text-black;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-display font-black tracking-tight uppercase;
+  }
+}
+
+@layer components {
+
+  /* Brutalist Container */
+  .brutal-container {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 border-x-2 border-art-black min-h-screen bg-white;
+  }
+
+  /* Buttons */
+  .btn-brutal {
+    @apply inline-flex items-center justify-center px-8 py-4 font-bold uppercase tracking-wider text-sm transition-all relative overflow-hidden;
+    background-color: var(--color-art-black);
+    color: var(--color-acid-yellow);
+    border: 2px solid var(--color-art-black);
+  }
+
+  .btn-brutal:hover {
+    @apply translate-x-1 -translate-y-1;
+    box-shadow: 4px 4px 0px 0px rgba(0, 0, 0, 1);
+    background-color: var(--color-acid-yellow);
+    color: var(--color-art-black);
+  }
+
+  .btn-brutal-secondary {
+    @apply inline-flex items-center justify-center px-8 py-4 font-bold uppercase tracking-wider text-sm transition-all;
+    background-color: transparent;
+    color: var(--color-art-black);
+    border: 2px solid var(--color-art-black);
+  }
+
+  .btn-brutal-secondary:hover {
+    background-color: var(--color-art-black);
+    color: var(--color-art-white);
+  }
+
+  /* Cards */
+  .card-brutal {
+    @apply bg-white border-2 border-art-black p-6 transition-all;
+  }
+
+  .card-brutal:hover {
+    @apply -translate-y-1;
+    box-shadow: 8px 8px 0px 0px rgba(204, 255, 0, 1);
+  }
+
+  /* Typography Utilities */
+  .text-mega {
+    @apply text-5xl md:text-7xl lg:text-9xl font-black leading-none;
+  }
+
+  .text-stroke {
+    -webkit-text-stroke: 1px black;
+    color: transparent;
+  }
+
+  .text-stroke-white {
+    -webkit-text-stroke: 1px white;
+    color: transparent;
+  }
+
+  /* Layout Utilities */
+  .grid-brutal {
+    @apply grid grid-cols-1 md:grid-cols-12 gap-0 border-2 border-art-black;
+  }
+
+  .grid-brutal>* {
+    @apply border-b-2 md:border-b-0 md:border-r-2 border-art-black p-8 last:border-0;
+  }
+}
