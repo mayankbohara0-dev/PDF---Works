@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios, { InternalAxiosRequestConfig } from 'axios';
 import { supabase } from './supabase';
 
 const api = axios.create({
@@ -10,10 +10,13 @@ const api = axios.create({
 
 // Add a request interceptor to include the auth token in every request
 api.interceptors.request.use(
-    async (config) => {
-        const { data: { session } } = await supabase.auth.getSession();
+    async (config: InternalAxiosRequestConfig) => {
+        const { data } = await supabase.auth.getSession();
+        const session = data?.session;
         if (session?.access_token) {
-            config.headers.Authorization = `Bearer ${session.access_token} `;
+            if (config.headers) {
+                config.headers.Authorization = `Bearer ${session.access_token}`;
+            }
         }
         return config;
     },

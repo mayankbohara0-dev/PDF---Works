@@ -1,43 +1,47 @@
 @import "tailwindcss";
 
-:root {
-  --art-black: #000000;
-  --art-zinc: #121212;
-  --art-white: #ffffff;
-  --art-gray: #f5f5f5;
-  --acid-yellow: #CCFF00;
-  --acid-lime: #a3ff00;
-  --electric-cyan: #00ffff;
-  --hot-pink: #ff00ff;
-}
-
-.dark {
-  --art-black: #ffffff;
-  --art-zinc: #e0e0e0;
-  --art-white: #050505;
-  --art-gray: #1a1a1a;
-  /* Keep accent colors same or adjust for dark mode pop */
-  --acid-yellow: #d4ff00;
-}
+/* 
+  Petpeeps-inspired Design System 
+  Fonts: Fredoka (Headings), Nunito (Body)
+*/
+@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@300;400;500;600;700&family=Nunito:wght@300;400;500;600;700;800&display=swap');
 
 @theme {
-  --color-art-black: var(--art-black);
-  --color-art-white: var(--art-white);
-  --color-art-zinc: var(--art-zinc);
-  --color-art-gray: var(--art-gray);
-  --color-acid-yellow: var(--acid-yellow);
-  --color-acid-lime: var(--acid-lime);
-  --color-electric-cyan: var(--electric-cyan);
-  --color-hot-pink: var(--hot-pink);
+  /* Fonts */
+  --font-display: 'Fredoka', cursive, sans-serif;
+  --font-body: 'Nunito', sans-serif;
 
-  --font-display: 'Inter', system-ui, sans-serif;
-  --font-body: 'Inter', system-ui, sans-serif;
+  /* Colors */
+  --color-primary: #0066FF;
+  --color-primary-light: #3384FF;
+  --color-primary-dark: #004ECC;
 
+  --color-secondary: #F4F7FA;
+  --color-secondary-dark: #E2E8F0;
+
+  --color-accent: #FFCC00;
+  --color-accent-hover: #E6B800;
+
+  --color-success: #48BB78;
+  --color-error: #F56565;
+
+  --color-text-main: #2D3748;
+  --color-text-body: #4A5568;
+  --color-text-light: #A0AEC0;
+
+  /* Radius */
+  --radius-xl: 1rem;
+  --radius-2xl: 1.5rem;
+  --radius-3xl: 2rem;
+
+  /* Shadows */
+  --shadow-soft: 0 10px 25px -5px rgba(0, 102, 255, 0.1), 0 8px 10px -6px rgba(0, 102, 255, 0.1);
+  --shadow-glow: 0 0 20px rgba(0, 102, 255, 0.3);
+
+  /* Animations */
   --animate-float: float 6s ease-in-out infinite;
-  --animate-marquee: marquee 20s linear infinite;
-  --animate-slide-up: slideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-  --animate-slide-in-right: slideInRight 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-  --animate-pulse-fast: pulse 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  --animate-bounce-slow: bounceSlow 3s infinite;
+  --animate-fade-in-up: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 
   @keyframes float {
 
@@ -47,24 +51,26 @@
     }
 
     50% {
-      transform: translateY(-20px);
+      transform: translateY(-15px);
     }
   }
 
-  @keyframes marquee {
-    0% {
-      transform: translateX(0);
-    }
+  @keyframes bounceSlow {
 
+    0%,
     100% {
-      transform: translateX(-100%);
+      transform: translateY(0);
+    }
+
+    50% {
+      transform: translateY(-10px);
     }
   }
 
-  @keyframes slideUp {
+  @keyframes fadeInUp {
     from {
       opacity: 0;
-      transform: translateY(40px);
+      transform: translateY(20px);
     }
 
     to {
@@ -72,23 +78,16 @@
       transform: translateY(0);
     }
   }
-
-  @keyframes slideInRight {
-    from {
-      opacity: 0;
-      transform: translateX(100px);
-    }
-
-    to {
-      opacity: 1;
-      transform: translateX(0);
-    }
-  }
 }
+
+/* 
+  In Tailwind v4, we use standard CSS where possible.
+  @apply is still supported but ideally used sparingly.
+*/
 
 @layer base {
   body {
-    @apply bg-art-white text-art-black antialiased font-body overflow-x-hidden selection:bg-acid-yellow selection:text-black;
+    @apply bg-secondary text-text-body antialiased font-body overflow-x-hidden selection:bg-primary/20 selection:text-primary;
   }
 
   h1,
@@ -97,75 +96,32 @@
   h4,
   h5,
   h6 {
-    @apply font-display font-black tracking-tight uppercase;
+    @apply font-display font-bold text-text-main tracking-tight;
   }
 }
 
 @layer components {
 
-  /* Brutalist Container */
-  .brutal-container {
-    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 border-x-2 border-art-black min-h-screen bg-white;
-  }
-
   /* Buttons */
-  .btn-brutal {
-    @apply inline-flex items-center justify-center px-8 py-4 font-bold uppercase tracking-wider text-sm transition-all relative overflow-hidden;
-    background-color: var(--color-art-black);
-    color: var(--color-acid-yellow);
-    border: 2px solid var(--color-art-black);
+  .btn-primary {
+    @apply inline-flex items-center justify-center px-8 py-4 font-bold rounded-full text-white bg-primary hover:bg-primary-dark transition-all transform hover:-translate-y-1 hover:shadow-lg shadow-primary/30 active:scale-95;
   }
 
-  .btn-brutal:hover {
-    @apply translate-x-1 -translate-y-1;
-    box-shadow: 4px 4px 0px 0px rgba(0, 0, 0, 1);
-    background-color: var(--color-acid-yellow);
-    color: var(--color-art-black);
+  .btn-accent {
+    @apply inline-flex items-center justify-center px-8 py-4 font-bold rounded-full text-text-main bg-accent hover:bg-accent-hover transition-all transform hover:-translate-y-1 hover:shadow-lg shadow-accent/30 active:scale-95;
   }
 
-  .btn-brutal-secondary {
-    @apply inline-flex items-center justify-center px-8 py-4 font-bold uppercase tracking-wider text-sm transition-all;
-    background-color: transparent;
-    color: var(--color-art-black);
-    border: 2px solid var(--color-art-black);
-  }
-
-  .btn-brutal-secondary:hover {
-    background-color: var(--color-art-black);
-    color: var(--color-art-white);
+  .btn-secondary {
+    @apply inline-flex items-center justify-center px-8 py-4 font-bold rounded-full text-primary bg-white border-2 border-primary/10 hover:border-primary hover:bg-white transition-all transform hover:-translate-y-1 hover:shadow-md active:scale-95;
   }
 
   /* Cards */
-  .card-brutal {
-    @apply bg-white border-2 border-art-black p-6 transition-all;
+  .card-base {
+    @apply bg-white rounded-3xl p-8 border border-gray-100 shadow-soft transition-all hover:shadow-xl hover:-translate-y-1;
   }
 
-  .card-brutal:hover {
-    @apply -translate-y-1;
-    box-shadow: 8px 8px 0px 0px rgba(204, 255, 0, 1);
-  }
-
-  /* Typography Utilities */
-  .text-mega {
-    @apply text-5xl md:text-7xl lg:text-9xl font-black leading-none;
-  }
-
-  .text-stroke {
-    -webkit-text-stroke: 1px black;
-    color: transparent;
-  }
-
-  .text-stroke-white {
-    -webkit-text-stroke: 1px white;
-    color: transparent;
-  }
-
-  /* Layout Utilities */
-  .grid-brutal {
-    @apply grid grid-cols-1 md:grid-cols-12 gap-0 border-2 border-art-black;
-  }
-
-  .grid-brutal>* {
-    @apply border-b-2 md:border-b-0 md:border-r-2 border-art-black p-8 last:border-0;
+  /* Inputs */
+  .input-base {
+    @apply w-full px-6 py-4 rounded-2xl border-2 border-gray-100 bg-gray-50 text-text-main font-bold focus:outline-none focus:border-primary focus:bg-white focus:ring-4 focus:ring-primary/10 transition-all placeholder-gray-400;
   }
 }

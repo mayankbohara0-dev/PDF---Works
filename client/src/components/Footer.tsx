@@ -1,60 +1,59 @@
 import React from 'react';
-import { FileText, Github, Twitter } from 'lucide-react';
+import { FileText, Github, Twitter, Heart } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const Footer: React.FC = () => {
     return (
-        <footer className="bg-art-black text-white pt-20 pb-10 border-t-2 border-art-black">
+        <footer className="bg-white pt-20 pb-10 border-t border-gray-100">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
                     <div className="col-span-1 md:col-span-1">
                         <div className="flex items-center gap-3 mb-6">
-                            <div className="bg-acid-yellow p-2 border-2 border-white">
-                                <FileText className="h-6 w-6 text-black" />
+                            <div className="bg-primary/10 p-2 rounded-xl text-primary">
+                                <FileText className="h-6 w-6" />
                             </div>
-                            <span className="text-3xl font-black uppercase italic tracking-tighter">PDFWorks</span>
+                            <span className="text-2xl font-bold text-text-main tracking-tight">PDFWorks</span>
                         </div>
-                        <p className="text-gray-400 font-medium max-w-xs">
-                            Brutally efficient PDF tools for the modern web.
-                            <span className="block mt-4 text-white">No fluff. Just power.</span>
+                        <p className="text-text-body font-medium leading-relaxed">
+                            Making PDF tools simple, friendly, and accessible for everyone.
                         </p>
                     </div>
 
                     <div>
-                        <h3 className="font-black text-xl uppercase mb-6 text-acid-yellow">Tools</h3>
-                        <ul className="space-y-4 font-bold tracking-wide">
-                            <li><Link to="/merge" className="hover:text-acid-yellow hover:underline decoration-2 underline-offset-4 transition-all">MERGE PDF</Link></li>
-                            <li><Link to="/split" className="hover:text-electric-cyan hover:underline decoration-2 underline-offset-4 transition-all">SPLIT PDF</Link></li>
-                            <li><Link to="/compress" className="hover:text-hot-pink hover:underline decoration-2 underline-offset-4 transition-all">COMPRESS PDF</Link></li>
+                        <h3 className="font-bold text-lg mb-6 text-text-main">Tools</h3>
+                        <ul className="space-y-4 font-medium text-text-body">
+                            <li><Link to="/merge" className="hover:text-primary transition-colors">Merge PDF</Link></li>
+                            <li><Link to="/split" className="hover:text-primary transition-colors">Split PDF</Link></li>
+                            <li><Link to="/compress" className="hover:text-primary transition-colors">Compress PDF</Link></li>
                         </ul>
                     </div>
 
                     <div>
-                        <h3 className="font-black text-xl uppercase mb-6 text-electric-cyan">Support</h3>
-                        <ul className="space-y-4 font-bold tracking-wide">
-                            <li><a href="#" className="hover:text-electric-cyan transition-colors">HELP CENTER</a></li>
-                            <li><a href="#" className="hover:text-electric-cyan transition-colors">PRIVACY</a></li>
-                            <li><a href="#" className="hover:text-electric-cyan transition-colors">TERMS</a></li>
+                        <h3 className="font-bold text-lg mb-6 text-text-main">Support</h3>
+                        <ul className="space-y-4 font-medium text-text-body">
+                            <li><a href="#" className="hover:text-primary transition-colors">Help Center</a></li>
+                            <li><a href="#" className="hover:text-primary transition-colors">Privacy Policy</a></li>
+                            <li><a href="#" className="hover:text-primary transition-colors">Terms of Service</a></li>
                         </ul>
                     </div>
 
                     <div>
-                        <h3 className="font-black text-xl uppercase mb-6 text-hot-pink">Social</h3>
+                        <h3 className="font-bold text-lg mb-6 text-text-main">Connect</h3>
                         <div className="flex gap-4">
-                            <a href="#" className="p-3 bg-white text-black border-2 border-transparent hover:bg-black hover:text-white hover:border-white transition-all">
-                                <Github className="w-6 h-6" />
+                            <a href="#" className="p-3 bg-secondary rounded-full text-text-main hover:bg-primary hover:text-white transition-all hover:-translate-y-1 shadow-sm">
+                                <Github className="w-5 h-5" />
                             </a>
-                            <a href="#" className="p-3 bg-white text-black border-2 border-transparent hover:bg-black hover:text-white hover:border-white transition-all">
-                                <Twitter className="w-6 h-6" />
+                            <a href="#" className="p-3 bg-secondary rounded-full text-text-main hover:bg-primary hover:text-white transition-all hover:-translate-y-1 shadow-sm">
+                                <Twitter className="w-5 h-5" />
                             </a>
                         </div>
                     </div>
                 </div>
 
-                <div className="border-t-2 border-white/20 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
-                    <p className="font-bold text-gray-500 uppercase tracking-wider">© 2026 PDFWorks Inc.</p>
-                    <p className="font-bold uppercase tracking-wider">
-                        Designed with <span className="text-hot-pink">VOLTAGE</span>
+                <div className="border-t border-gray-100 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-sm font-medium text-gray-400">
+                    <p>© 2026 PDFWorks Inc. All rights reserved.</p>
+                    <p className="flex items-center gap-1">
+                        Made with <Heart className="w-4 h-4 text-red-400 fill-current" /> by Mayank
                     </p>
                 </div>
             </div>

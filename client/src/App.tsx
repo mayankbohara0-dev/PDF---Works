@@ -9,6 +9,7 @@ import Signup from './pages/Signup';
 import Dashboard from './pages/Dashboard';
 import ProtectedRoute from './components/ProtectedRoute';
 import LoadingSpinner from './components/LoadingSpinner';
+import ErrorBoundary from './components/ErrorBoundary';
 
 // Lazy load tool routes
 const Merge = lazy(() => import('./pages/Merge'));
@@ -18,28 +19,30 @@ const Compress = lazy(() => import('./pages/Compress'));
 function App() {
   return (
     <Router>
-      <AuthProvider>
-        <Toaster position="top-right" richColors closeButton theme="system" />
-        <Suspense fallback={<LoadingSpinner />}>
-          <Routes>
-            <Route path="/" element={<Landing />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/signup" element={<Signup />} />
-            <Route
-              path="/dashboard"
-              element={
-                <ProtectedRoute>
-                  <Dashboard />
-                </ProtectedRoute>
-              }
-            />
-            {/* Tool routes */}
-            <Route path="/merge" element={<ProtectedRoute><Merge /></ProtectedRoute>} />
-            <Route path="/split" element={<ProtectedRoute><Split /></ProtectedRoute>} />
-            <Route path="/compress" element={<ProtectedRoute><Compress /></ProtectedRoute>} />
-          </Routes>
-        </Suspense>
-      </AuthProvider>
+      <ErrorBoundary>
+        <AuthProvider>
+          <Toaster position="top-right" richColors closeButton theme="system" />
+          <Suspense fallback={<LoadingSpinner />}>
+            <Routes>
+              <Route path="/" element={<Landing />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/signup" element={<Signup />} />
+              <Route
+                path="/dashboard"
+                element={
+                  <ProtectedRoute>
+                    <Dashboard />
+                  </ProtectedRoute>
+                }
+              />
+              {/* Tool routes */}
+              <Route path="/merge" element={<ProtectedRoute><Merge /></ProtectedRoute>} />
+              <Route path="/split" element={<ProtectedRoute><Split /></ProtectedRoute>} />
+              <Route path="/compress" element={<ProtectedRoute><Compress /></ProtectedRoute>} />
+            </Routes>
+          </Suspense>
+        </AuthProvider>
+      </ErrorBoundary>
     </Router>
   );
 }

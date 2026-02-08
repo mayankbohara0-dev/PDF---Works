@@ -13,6 +13,10 @@ export const AuthProvider = ({ children }) => {
         let mounted = true;
 
         const getSession = async () => {
+            if (!supabase) {
+                if (mounted) setLoading(false);
+                return;
+            }
             try {
                 const { data: { session } } = await supabase.auth.getSession();
                 if (mounted) {
@@ -26,6 +30,8 @@ export const AuthProvider = ({ children }) => {
         };
 
         getSession();
+
+        if (!supabase) return;
 
         const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
             if (mounted) {
@@ -41,9 +47,9 @@ export const AuthProvider = ({ children }) => {
     }, []);
 
     const signUp = async (email, password) => {
+        if (!supabase) return { error: { message: "Supabase client not initialized" } };
         // Mock Bypass for Rate Limits
         if (email === 'admin@mock.com') {
-            console.log("MOCK SIGNUP DETECTED");
             const mockUser = { id: 'mock-user-id', email: 'admin@mock.com' };
             setUser(mockUser);
             return { data: { user: mockUser, session: { access_token: 'mock-token' } }, error: null };
@@ -52,9 +58,9 @@ export const AuthProvider = ({ children }) => {
     };
 
     const signIn = async (email, password) => {
+        if (!supabase) return { error: { message: "Supabase client not initialized" } };
         // Mock Bypass for Rate Limits
         if (email === 'admin@mock.com') {
-            console.log("MOCK SIGNIN DETECTED");
             const mockUser = { id: 'mock-user-id', email: 'admin@mock.com' };
             setUser(mockUser);
             return { data: { user: mockUser, session: { access_token: 'mock-token' } }, error: null };
@@ -63,6 +69,7 @@ export const AuthProvider = ({ children }) => {
     };
 
     const signOut = async () => {
+        if (!supabase) return { error: { message: "Supabase client not initialized" } };
         if (user?.email === 'admin@mock.com') {
             setUser(null);
             return { error: null };

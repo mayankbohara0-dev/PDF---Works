@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import FileUploader from '../components/FileUploader';
@@ -6,6 +6,7 @@ import { Minimize2, ArrowLeft, Download, AlertCircle, Loader, CheckCircle } from
 import { Link } from 'react-router-dom';
 import { useMutation } from '@tanstack/react-query';
 import api from '../api';
+import SEO from '../components/SEO';
 
 interface SuccessStats {
     original: string;
@@ -30,7 +31,6 @@ const Compress = () => {
     const mutation = useMutation({
         mutationFn: async (filesToCompress: File[]) => {
             const formData = new FormData();
-            // Server expects 'pdf' field as per routes/pdf.routes.js
             formData.append('pdf', filesToCompress[0]);
 
             const response = await api.post('/pdf/compress', formData, {
@@ -89,97 +89,112 @@ const Compress = () => {
     };
 
     return (
-        <div className="min-h-screen flex flex-col bg-art-white font-body">
+        <div className="min-h-screen flex flex-col bg-secondary font-body">
+            <SEO
+                title="Compress PDF File Size"
+                description="Reduce PDF file size online for free while maintaining quality. Best PDF compressor."
+                keywords="compress pdf, reduce pdf size, optimize pdf, shrink pdf"
+            />
             <Navbar />
 
             <main className="flex-grow pt-32 pb-20 px-4">
-                <div className="max-w-5xl mx-auto">
+                <div className="max-w-3xl mx-auto">
                     {/* Header */}
-                    <div className="mb-8">
-                        <Link to="/dashboard" className="inline-flex items-center gap-2 text-sm font-bold uppercase tracking-wider text-gray-400 hover:text-black transition-colors group">
+                    <div className="mb-8 flex items-center justify-between">
+                        <Link to="/dashboard" className="inline-flex items-center gap-2 text-sm font-bold text-gray-500 hover:text-primary transition-colors group px-4 py-2 rounded-full hover:bg-white">
                             <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
                             Back to Dashboard
                         </Link>
                     </div>
 
-                    <div className="flex items-center gap-6 mb-12 border-b-2 border-art-black pb-8">
-                        <div className="bg-hot-pink border-2 border-art-black p-4 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
-                            <Minimize2 className="w-10 h-10 text-white" />
+                    <div className="text-center mb-10">
+                        <div className="w-20 h-20 bg-pink-50 text-pink-600 rounded-3xl flex items-center justify-center mx-auto mb-6 shadow-soft transform rotate-3">
+                            <Minimize2 className="w-10 h-10" />
                         </div>
-                        <div>
-                            <h1 className="text-4xl md:text-6xl font-black uppercase leading-none mb-2">Compress PDF</h1>
-                            <p className="text-gray-500 font-bold text-lg">Optimized file reduction using smart algorithm compression.</p>
-                        </div>
+                        <h1 className="text-4xl lg:text-5xl font-bold mb-4 text-text-main">Compress PDF</h1>
+                        <p className="text-lg text-text-body font-medium">Optimized file reduction using smart algorithm compression.</p>
                     </div>
 
                     {/* Tool Interface */}
-                    <div className="bg-white border-2 border-art-black p-8 md:p-12 shadow-[8px_8px_0px_0px_#ff00ff]">
+                    <div className="bg-white rounded-[2rem] p-8 md:p-12 shadow-soft border border-gray-100 relative overflow-hidden">
+
+                        {/* Decorative blob */}
+                        <div className="absolute top-0 right-0 w-64 h-64 bg-pink-50 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 pointer-events-none"></div>
+
                         <FileUploader
-                            onFilesSelected={handleFilesSelected}
+                            onFilesSelected={handleFilesSelected as any}
                             multiple={false}
                             maxFiles={1}
                             maxSizeInMB={100}
                         />
 
                         {mutation.isError && (
-                            <div className="mt-8 p-4 bg-red-100 border-2 border-red-500 text-red-600 font-bold flex items-center gap-3 animate-slide-up">
+                            <div className="mt-6 p-4 bg-red-50 border border-red-100 text-red-600 font-bold flex items-center gap-3 rounded-2xl animate-fade-in-up">
                                 <AlertCircle className="w-5 h-5 flex-shrink-0" />
                                 {mutation.error instanceof Error ? mutation.error.message : 'An error occurred while compressing the file.'}
                             </div>
                         )}
 
                         {successStats && downloadUrl && (
-                            <div className="mt-8 p-6 bg-green-50 border-2 border-green-500 animate-slide-up">
-                                <div className="flex items-center gap-4 mb-4">
-                                    <CheckCircle className="w-8 h-8 text-green-600" />
+                            <div className="mt-8 p-6 bg-green-50 rounded-[2rem] border border-green-100 animate-fade-in-up">
+                                <div className="flex items-center gap-4 mb-6">
+                                    <div className="w-12 h-12 bg-white text-green-500 rounded-full flex items-center justify-center shadow-sm">
+                                        <CheckCircle className="w-6 h-6" />
+                                    </div>
                                     <div>
-                                        <h3 className="text-xl font-black uppercase text-green-700">Compression Successful!</h3>
-                                        <p className="text-sm font-bold text-green-600">Your file is ready.</p>
+                                        <h3 className="text-xl font-bold text-green-700">Compression Successful!</h3>
+                                        <p className="text-sm font-medium text-green-600">Your file is much lighter now.</p>
                                     </div>
                                 </div>
-                                <div className="grid grid-cols-3 gap-4 border-t-2 border-green-200 pt-4 mb-6">
-                                    <div>
-                                        <p className="text-xs font-bold uppercase text-gray-400">Original</p>
-                                        <p className="text-lg font-black">{successStats.original} MB</p>
+                                <div className="grid grid-cols-3 gap-4 border-t border-green-100 pt-6 mb-6">
+                                    <div className="text-center">
+                                        <p className="text-xs font-bold uppercase text-gray-400 mb-1">Original</p>
+                                        <p className="text-xl font-black text-text-main">{successStats.original} MB</p>
                                     </div>
-                                    <div>
-                                        <p className="text-xs font-bold uppercase text-gray-400">New Size</p>
-                                        <p className="text-lg font-black">{successStats.compressed} MB</p>
+                                    <div className="text-center border-l border-green-200">
+                                        <p className="text-xs font-bold uppercase text-gray-400 mb-1">New Size</p>
+                                        <p className="text-xl font-black text-text-main">{successStats.compressed} MB</p>
                                     </div>
-                                    <div>
-                                        <p className="text-xs font-bold uppercase text-gray-400">Saved</p>
-                                        <p className="text-lg font-black text-green-600">-{successStats.percent}%</p>
+                                    <div className="text-center border-l border-green-200">
+                                        <p className="text-xs font-bold uppercase text-gray-400 mb-1">Saved</p>
+                                        <p className="text-xl font-black text-green-600">-{successStats.percent}%</p>
                                     </div>
                                 </div>
                                 <a
                                     href={downloadUrl}
                                     download={`compressed-${Date.now()}.pdf`}
-                                    className="btn-brutal text-xs py-3 px-6 bg-hot-pink text-white w-full text-center block border-2 border-black shadow-[4px_4px_0px_0px_black] hover:translate-y-1 hover:shadow-none transition-all"
+                                    className="btn-primary bg-green-500 hover:bg-green-600 shadow-green-200 w-full text-center block"
                                 >
                                     Download Compressed PDF
                                 </a>
                             </div>
                         )}
 
-                        <div className="mt-8 flex justify-end">
-                            <button
-                                onClick={handleCompress}
-                                disabled={mutation.isPending || files.length === 0}
-                                className={`btn-brutal ${mutation.isPending || files.length === 0 ? 'opacity-50 cursor-not-allowed filter grayscale' : ''} bg-hot-pink text-white hover:bg-black hover:text-hot-pink`}
-                            >
-                                {mutation.isPending ? (
-                                    <span className="flex items-center gap-2">
-                                        <Loader className="w-5 h-5 animate-spin" />
-                                        OPTIMIZING...
-                                    </span>
-                                ) : (
-                                    <span className="flex items-center gap-2">
-                                        COMPRESS NOW
-                                        <Download className="w-5 h-5" />
-                                    </span>
-                                )}
-                            </button>
-                        </div>
+                        {!downloadUrl && (
+                            <div className="mt-8 flex justify-end">
+                                <button
+                                    onClick={handleCompress}
+                                    disabled={mutation.isPending || files.length === 0}
+                                    className={`w-full py-4 rounded-full font-bold text-lg transition-all transform flex items-center justify-center gap-2
+                                        ${mutation.isPending || files.length === 0
+                                            ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                                            : 'bg-pink-600 text-white hover:bg-pink-700 hover:-translate-y-1 shadow-lg shadow-pink-200'}
+                                    `}
+                                >
+                                    {mutation.isPending ? (
+                                        <>
+                                            <Loader className="w-6 h-6 animate-spin" />
+                                            Optimizing...
+                                        </>
+                                    ) : (
+                                        <>
+                                            Compress Now
+                                            <Download className="w-6 h-6" />
+                                        </>
+                                    )}
+                                </button>
+                            </div>
+                        )}
                     </div>
                 </div>
             </main>

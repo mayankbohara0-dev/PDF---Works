@@ -1,11 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import FileUploader from '../components/FileUploader';
-import { Scissors, ArrowLeft, Download, AlertCircle, Loader, CheckCircle } from 'lucide-react';
+import { Scissors, ArrowLeft, AlertCircle, Loader, CheckCircle, ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useMutation } from '@tanstack/react-query';
 import api from '../api';
+import SEO from '../components/SEO';
 
 const Split = () => {
     const [files, setFiles] = useState<File[]>([]);
@@ -22,7 +23,6 @@ const Split = () => {
     const mutation = useMutation({
         mutationFn: async ({ file, ranges }: { file: File; ranges: string }) => {
             const formData = new FormData();
-            // Server expects 'pdf' field as per routes/pdf.routes.js
             formData.append('pdf', file);
             formData.append('ranges', ranges);
 
@@ -63,102 +63,116 @@ const Split = () => {
     };
 
     return (
-        <div className="min-h-screen flex flex-col bg-art-white font-body">
+        <div className="min-h-screen flex flex-col bg-secondary font-body">
+            <SEO
+                title="Split PDF Files Online"
+                description="Extract pages from your PDF or split it into multiple files. Fast and free PDF splitter."
+                keywords="split pdf, extract pages, separate pdf, free pdf splitter"
+            />
             <Navbar />
 
             <main className="flex-grow pt-32 pb-20 px-4">
-                <div className="max-w-5xl mx-auto">
+                <div className="max-w-3xl mx-auto">
                     {/* Header */}
-                    <div className="mb-8">
-                        <Link to="/dashboard" className="inline-flex items-center gap-2 text-sm font-bold uppercase tracking-wider text-gray-400 hover:text-black transition-colors group">
+                    <div className="mb-8 flex items-center justify-between">
+                        <Link to="/dashboard" className="inline-flex items-center gap-2 text-sm font-bold text-gray-500 hover:text-primary transition-colors group px-4 py-2 rounded-full hover:bg-white">
                             <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
                             Back to Dashboard
                         </Link>
                     </div>
 
-                    <div className="flex items-center gap-6 mb-12 border-b-2 border-art-black pb-8">
-                        <div className="bg-electric-cyan border-2 border-art-black p-4 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
-                            <Scissors className="w-10 h-10 text-black" />
+                    <div className="text-center mb-10">
+                        <div className="w-20 h-20 bg-purple-50 text-purple-600 rounded-3xl flex items-center justify-center mx-auto mb-6 shadow-soft transform -rotate-3">
+                            <Scissors className="w-10 h-10" />
                         </div>
-                        <div>
-                            <h1 className="text-4xl md:text-6xl font-black uppercase leading-none mb-2">Split PDF</h1>
-                            <p className="text-gray-500 font-bold text-lg">Extract specific pages, ranges, or separate documents.</p>
-                        </div>
+                        <h1 className="text-4xl lg:text-5xl font-bold mb-4 text-text-main">Split PDF</h1>
+                        <p className="text-lg text-text-body font-medium">Extract specific pages, ranges, or separate documents.</p>
                     </div>
 
                     {/* Tool Interface */}
-                    <div className="bg-white border-2 border-art-black p-8 md:p-12 shadow-[8px_8px_0px_0px_#00FFFF]">
+                    <div className="bg-white rounded-[2rem] p-8 md:p-12 shadow-soft border border-gray-100 relative overflow-hidden">
+
+                        {/* Decorative blob */}
+                        <div className="absolute top-0 right-0 w-64 h-64 bg-purple-50 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 pointer-events-none"></div>
+
                         <FileUploader
-                            onFilesSelected={handleFilesSelected}
+                            onFilesSelected={handleFilesSelected as any}
                             multiple={false}
                             maxFiles={1}
                             maxSizeInMB={100}
                         />
 
-                        <div className="mt-8">
-                            <label className="block text-sm font-black uppercase mb-3 text-art-black">Page Ranges</label>
+                        <div className="mt-8 relative z-10">
+                            <label className="block text-sm font-bold uppercase mb-3 text-text-main tracking-wide">Page Ranges</label>
                             <input
                                 type="text"
                                 value={ranges}
                                 onChange={(e) => setRanges(e.target.value)}
                                 placeholder="e.g. 1-3, 5, 7-9"
-                                className="w-full p-4 border-2 border-art-black bg-gray-50 focus:bg-white focus:outline-none focus:shadow-[4px_4px_0px_0px_black] transition-all font-bold text-lg placeholder-gray-300"
+                                className="input-base"
                             />
-                            <p className="text-xs font-bold text-gray-400 mt-2 uppercase tracking-wide">Separate ranges with commas (e.g. 1-5, 8, 11-13)</p>
+                            <p className="text-xs font-bold text-gray-400 mt-3 px-2">
+                                Tip: Use commas for single pages (1, 5) and hyphens for ranges (1-5).
+                            </p>
                         </div>
 
                         {mutation.isError && (
-                            <div className="mt-8 p-4 bg-red-100 border-2 border-red-500 text-red-600 font-bold flex items-center gap-3 animate-slide-up">
+                            <div className="mt-6 p-4 bg-red-50 border border-red-100 text-red-600 font-bold flex items-center gap-3 rounded-2xl animate-fade-in-up">
                                 <AlertCircle className="w-5 h-5 flex-shrink-0" />
                                 {mutation.error instanceof Error ? mutation.error.message : 'An error occurred while splitting the file.'}
                             </div>
                         )}
 
                         {!ranges.trim() && files.length > 0 && !mutation.isError && (
-                            <div className="mt-4 p-2 text-blue-600 font-medium text-sm flex items-center gap-2">
+                            <div className="mt-4 p-3 bg-blue-50 text-primary font-bold text-sm flex items-center gap-2 rounded-xl justify-center animate-fade-in-up">
                                 <AlertCircle className="w-4 h-4" />
                                 Please specify the pages you want to extract.
                             </div>
                         )}
 
                         {downloadUrl && (
-                            <div className="mt-8 p-6 bg-acid-lime/20 border-2 border-acid-lime flex items-center justify-between">
-                                <div className="flex items-center gap-4">
-                                    <CheckCircle className="w-8 h-8 text-black" />
-                                    <div>
-                                        <h3 className="font-black uppercase text-lg">Split Successful!</h3>
-                                        <p className="font-medium text-sm">Your file is ready for download.</p>
-                                    </div>
+                            <div className="mt-8 p-8 bg-green-50 rounded-[2rem] border border-green-100 text-center animate-fade-in-up">
+                                <div className="w-16 h-16 bg-white text-green-500 rounded-full flex items-center justify-center mx-auto mb-4 shadow-sm">
+                                    <CheckCircle className="w-8 h-8" />
                                 </div>
+                                <h3 className="text-2xl font-bold text-green-700 mb-2">Split Successful!</h3>
+                                <p className="text-green-600 font-medium mb-6">Your extracted file is ready.</p>
+
                                 <a
                                     href={downloadUrl}
                                     download={`split-${Date.now()}.pdf`}
-                                    className="btn-brutal text-xs py-3 px-6 bg-electric-cyan text-black border-2 border-black shadow-[4px_4px_0px_0px_black] hover:translate-y-1 hover:shadow-none transition-all"
+                                    className="btn-primary bg-green-500 hover:bg-green-600 shadow-green-200 w-full md:w-auto"
                                 >
-                                    Download PDF
+                                    Download Split PDF
                                 </a>
                             </div>
                         )}
 
-                        <div className="mt-8 flex justify-end">
-                            <button
-                                onClick={handleSplit}
-                                disabled={mutation.isPending || files.length === 0 || !ranges.trim()}
-                                className={`btn-brutal ${mutation.isPending || files.length === 0 || !ranges.trim() ? 'opacity-50 cursor-not-allowed filter grayscale' : ''} bg-electric-cyan text-black hover:bg-black hover:text-electric-cyan`}
-                            >
-                                {mutation.isPending ? (
-                                    <span className="flex items-center gap-2">
-                                        <Loader className="w-5 h-5 animate-spin" />
-                                        PROCESSING...
-                                    </span>
-                                ) : (
-                                    <span className="flex items-center gap-2">
-                                        SPLIT PDF
-                                        <Download className="w-5 h-5" />
-                                    </span>
-                                )}
-                            </button>
-                        </div>
+                        {!downloadUrl && (
+                            <div className="mt-8">
+                                <button
+                                    onClick={handleSplit}
+                                    disabled={mutation.isPending || files.length === 0 || !ranges.trim()}
+                                    className={`w-full py-4 rounded-full font-bold text-lg transition-all transform flex items-center justify-center gap-2
+                                        ${mutation.isPending || files.length === 0 || !ranges.trim()
+                                            ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                                            : 'bg-purple-600 text-white hover:bg-purple-700 hover:-translate-y-1 shadow-lg shadow-purple-200'}
+                                    `}
+                                >
+                                    {mutation.isPending ? (
+                                        <>
+                                            <Loader className="w-6 h-6 animate-spin" />
+                                            Splitting Pages...
+                                        </>
+                                    ) : (
+                                        <>
+                                            Split PDF Now
+                                            <ArrowRight className="w-6 h-6" />
+                                        </>
+                                    )}
+                                </button>
+                            </div>
+                        )}
                     </div>
                 </div>
             </main>
