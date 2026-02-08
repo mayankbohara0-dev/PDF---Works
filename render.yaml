@@ -1,0 +1,27 @@
+services:
+  # 1. The React Client (Static Site)
+  - type: web
+    name: pdf-works-client
+    env: static
+    buildCommand: cd client && npm install && npm run build
+    staticPublishPath: ./client/dist
+    envVars:
+      - key: VITE_API_URL
+        fromService:
+          type: web
+          name: pdf-works-server
+          property: url
+      - key: VITE_SUPABASE_URL
+        sync: false
+      - key: VITE_SUPABASE_ANON_KEY
+        sync: false
+
+  # 2. The Node.js Server (Web Service)
+  - type: web
+    name: pdf-works-server
+    env: node
+    buildCommand: cd server && npm install
+    startCommand: cd server && npm start
+    envVars:
+      - key: PORT
+        value: 10000
