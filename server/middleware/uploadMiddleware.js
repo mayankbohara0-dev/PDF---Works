@@ -1,7 +1,5 @@
 const multer = require('multer');
 const path = require('path');
-const fs = require('fs');
-
 const os = require('os');
 
 // Use system temp directory for Vercel (read-only filesystem elsewhere)

@@ -4,16 +4,25 @@ const os = require('os');
 const path = require('path');
 const { isValidPdf } = require('../utils/validation');
 
+// Constants
+const MIN_FILES_FOR_MERGE = 2;
+
+/**
+ * Merge multiple PDF files into a single PDF document.
+ * 
+ * @param {Object} req - Express request object with files array
+ * @param {Object} res - Express response object
+ * @returns {Promise<void>} Downloads the merged PDF file
+ */
 const mergePdfs = async (req, res) => {
     try {
-        if (!req.files || req.files.length < 2) {
-            return res.status(400).json({ message: 'At least 2 files are required.' });
+        if (!req.files || req.files.length < MIN_FILES_FOR_MERGE) {
+            return res.status(400).json({ message: `At least ${MIN_FILES_FOR_MERGE} files are required.` });
         }
 
         // Validate all files first
         for (const file of req.files) {
             if (!isValidPdf(file.path)) {
-                // Cleanup invalid file immediately
                 fs.unlink(file.path, () => { });
                 return res.status(400).json({ message: `File ${file.originalname} is not a valid PDF.` });
             }
@@ -32,22 +41,16 @@ const mergePdfs = async (req, res) => {
         const fileName = `merged-${Date.now()}.pdf`;
         const outputPath = path.join(os.tmpdir(), fileName);
 
-        // No need to ensure directory exists for os.tmpdir()
-
         fs.writeFileSync(outputPath, mergedPdfBytes);
 
-        // Stream file back to client properly
         res.download(outputPath, fileName, (err) => {
             if (err) {
                 console.error('File download error:', err);
             }
-            // Cleanup input files immediately after processing? 
-            // Or let the scheduled job handle it. 
-            // For privacy, maybe better to delete input files now.
+            // Clean up input files for privacy
             req.files.forEach(f => {
                 fs.unlink(f.path, () => { });
             });
-            // Output file will be cleaned up by cron job
         });
 
     } catch (error) {
@@ -56,6 +59,14 @@ const mergePdfs = async (req, res) => {
     }
 };
 
+/**
+ * Split a PDF file by extracting specified page ranges.
+ * Accepts page ranges in format: "1-3, 5, 7-9" and creates a single PDF with those pages.
+ * 
+ * @param {Object} req - Express request object with file and body.ranges
+ * @param {Object} res - Express response object
+ * @returns {Promise<void>} Downloads the split PDF file
+ */
 const splitPdf = async (req, res) => {
     try {
         if (!req.files || req.files.length === 0) {
@@ -69,7 +80,7 @@ const splitPdf = async (req, res) => {
             return res.status(400).json({ message: 'Invalid PDF file.' });
         }
 
-        const ranges = req.body.ranges; // "1-2, 5, 7-9"
+        const ranges = req.body.ranges;
 
         if (!ranges) {
             return res.status(400).json({ message: 'Page ranges are required.' });
@@ -79,22 +90,10 @@ const splitPdf = async (req, res) => {
         const originalPdf = await PDFDocument.load(fileBytes);
         const totalPages = originalPdf.getPageCount();
 
-        // Parse ranges
+        // Parse page ranges (e.g., "1-3, 5, 7-9") and extract pages into a single PDF
         const rangeParts = ranges.split(',').map(r => r.trim());
-        const newPdfInfo = []; // Array to store info for creating multiple PDFs if needed
-        // For simplicity, we'll create ONE PDF if only one range is specified, or a ZIP if multiple "groups" are conceptually distinct?
-        // Actually, the common pattern is: input "1-3, 5" -> Output ONE PDF with pages 1, 2, 3, 5. 
-        // OR Output separate PDFs for "1-3" and "5".
-        // Let's implement: Combine all selected pages into ONE new PDF for now (as per common "Extract Pages" behavior), 
-        // OR user might want to split into single pages. 
-        // The prompt says "Split PDF into smaller PDFs" -> "ZIP file of PDFs" or "Single PDF for selected range".
-        // Let's treat the input strictly:
-        // If the user inputs "1-2, 5" -> One PDF containing page 1, 2, 5.
-        // If the user wants separate files, that's a different mode. For MVP, let's do "Extract Mode" -> Single Output.
 
         const outputPdf = await PDFDocument.create();
-
-        // Helper to parse page numbers (1-based -> 0-based)
         const pagesToCopy = new Set();
 
         for (const part of rangeParts) {
@@ -138,6 +137,13 @@ const splitPdf = async (req, res) => {
     }
 };
 
+/**
+ * Compress a PDF file by re-saving it with pdf-lib optimization.
+ * 
+ * @param {Object} req - Express request object with file
+ * @param {Object} res - Express response object
+ * @returns {Promise<void>} Downloads the compressed PDF file
+ */
 const compressPdf = async (req, res) => {
     try {
         if (!req.files || req.files.length === 0) {
@@ -153,15 +159,13 @@ const compressPdf = async (req, res) => {
 
         const fileBytes = fs.readFileSync(file.path);
 
-        // PDF-Lib compression (re-saving with object stream optimization)
         const originalPdf = await PDFDocument.load(fileBytes);
         const compressedPdf = await PDFDocument.create();
         const pages = await compressedPdf.copyPages(originalPdf, originalPdf.getPageIndices());
 
         pages.forEach(page => compressedPdf.addPage(page));
 
-        // Note: Using `useObjectStreams: false` for compatibility, 
-        // but `true` might yield better results for PDF 1.5+.
+        // Using useObjectStreams: false for better compatibility
         const outputBytes = await compressedPdf.save({ useObjectStreams: false });
 
         const fileName = `compressed-${Date.now()}.pdf`;
@@ -169,7 +173,6 @@ const compressPdf = async (req, res) => {
 
         fs.writeFileSync(outputPath, outputBytes);
 
-        // Expose new size for client logic
         res.setHeader('X-Compressed-Size', outputBytes.length);
 
         res.download(outputPath, fileName, (err) => {

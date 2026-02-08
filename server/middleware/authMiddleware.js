@@ -11,6 +11,16 @@ if (supabaseUrl && supabaseServiceKey) {
     console.error("Supabase URL or Service Key missing on server.");
 }
 
+/**
+ * Middleware to verify Supabase authentication tokens.
+ * Extracts the Bearer token from the Authorization header and validates it with Supabase.
+ * Attaches the authenticated user to req.user if successful.
+ * 
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ * @param {Function} next - Express next middleware function
+ */
+
 const authMiddleware = async (req, res, next) => {
     const token = req.headers.authorization?.split(' ')[1];
 

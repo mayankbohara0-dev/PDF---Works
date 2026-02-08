@@ -1,9 +1,18 @@
 const fs = require('fs');
 const path = require('path');
 
+// Configuration
 const UPLOADS_DIR = path.join(__dirname, '../uploads');
 const PROCESSED_DIR = path.join(__dirname, '../processed');
 const MAX_AGE_MS = 10 * 60 * 1000; // 10 minutes
+const CLEANUP_INTERVAL_MS = 5 * 60 * 1000; // 5 minutes
+
+/**
+ * Clean up old files in a directory based on modification time.
+ * Files older than MAX_AGE_MS will be deleted.
+ * 
+ * @param {string} directory - Path to the directory to clean
+ */
 
 const cleanupDirectory = (directory) => {
     if (!fs.existsSync(directory)) return;
@@ -33,6 +42,10 @@ const cleanupDirectory = (directory) => {
     });
 };
 
+/**
+ * Start the automatic file cleanup job.
+ * Runs immediately and then every CLEANUP_INTERVAL_MS.
+ */
 const startCleanupJob = () => {
     // Run initial cleanup
     cleanupDirectory(UPLOADS_DIR);
@@ -42,7 +55,7 @@ const startCleanupJob = () => {
     setInterval(() => {
         cleanupDirectory(UPLOADS_DIR);
         cleanupDirectory(PROCESSED_DIR);
-    }, 5 * 60 * 1000);
+    }, CLEANUP_INTERVAL_MS);
 };
 
 module.exports = { startCleanupJob };

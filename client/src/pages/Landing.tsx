@@ -54,7 +54,6 @@ const Landing = () => {
                                 <Link
                                     to="/signup"
                                     className="btn-primary group"
-                                    onClick={() => console.log('Analytics: Hero CTA Clicked')}
                                     data-analytics-id="landing-cta-hero"
                                 >
                                     Start Creating
@@ -277,7 +276,6 @@ const Landing = () => {
                         <Link
                             to="/signup"
                             className="btn-primary text-lg px-12 py-5 shadow-glow hover:shadow-primary/60"
-                            onClick={() => console.log('Analytics: CTA Clicked')}
                             data-analytics-id="landing-cta-bottom"
                         >
                             Get Started for Free

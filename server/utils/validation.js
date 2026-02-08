@@ -1,9 +1,11 @@
 const fs = require('fs');
 
 /**
- * Validates if the file at the given path is a valid PDF by checking magic bytes.
- * @param {string} filePath - Path to the file to check.
- * @returns {boolean} - True if valid PDF signature found.
+ * Validates if a file is a valid PDF by checking its magic bytes (file signature).
+ * Reads the first 4 bytes of the file and checks for the PDF signature: %PDF
+ * 
+ * @param {string} filePath - Absolute path to the file to validate
+ * @returns {boolean} True if the file has a valid PDF signature, false otherwise
  */
 const isValidPdf = (filePath) => {
     try {
