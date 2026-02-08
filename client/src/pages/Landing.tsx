@@ -262,6 +262,13 @@ const Landing = () => {
                     </div>
                 </section>
 
+                {/* Ad Unit 2 */}
+                <section className="bg-secondary py-8">
+                    <div className="max-w-7xl mx-auto px-4">
+                        <AdUnit slot="4648283178" />
+                    </div>
+                </section>
+
                 {/* CTA Section */}
                 <section className="py-24 px-4 text-center">
                     <div className="max-w-4xl mx-auto">
