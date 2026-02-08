@@ -1,21 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { FileText, Menu, X } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
+import ThemeToggle from './ThemeToggle';
 
-const Navbar = () => {
-    const [scrolled, setScrolled] = useState(false);
+const Navbar: React.FC = () => {
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
     const { user, signOut } = useAuth();
     const navigate = useNavigate();
-
-    useEffect(() => {
-        const handleScroll = () => {
-            setScrolled(window.scrollY > 0);
-        };
-        window.addEventListener('scroll', handleScroll);
-        return () => window.removeEventListener('scroll', handleScroll);
-    }, []);
 
     const handleSignOut = async () => {
         await signOut();
@@ -46,6 +38,7 @@ const Navbar = () => {
                                 <Link to="/split" className="font-bold uppercase tracking-wider text-sm hover:underline decoration-2 underline-offset-4">Split</Link>
 
                                 <div className="flex items-center gap-4 ml-4 border-l-2 border-art-black pl-8 h-10">
+                                    <ThemeToggle />
                                     <span className="font-bold text-xs uppercase tracking-wide hidden lg:block text-gray-500">
                                         {user.email?.split('@')[0]}
                                     </span>
@@ -61,6 +54,7 @@ const Navbar = () => {
                             <>
                                 <a href="#features" className="font-bold uppercase tracking-wider text-sm hover:underline decoration-2 underline-offset-4">Features</a>
                                 <div className="flex items-center gap-4 ml-4 border-l-2 border-art-black pl-8 h-10">
+                                    <ThemeToggle />
                                     <Link to="/login" className="font-bold uppercase tracking-wider text-sm hover:bg-acid-yellow px-2 py-1 transition-colors">Sign in</Link>
                                     <Link to="/signup" className="btn-brutal px-6 py-2 text-xs">
                                         Start Free
@@ -71,7 +65,8 @@ const Navbar = () => {
                     </div>
 
                     {/* Mobile Toggle */}
-                    <div className="md:hidden">
+                    <div className="md:hidden flex items-center gap-4">
+                        <ThemeToggle />
                         <button onClick={() => setMobileMenuOpen(!mobileMenuOpen)} className="p-2 border-2 border-art-black hover:bg-art-black hover:text-white transition-colors">
                             {mobileMenuOpen ? <X /> : <Menu />}
                         </button>

@@ -2,7 +2,7 @@ import React from 'react';
 import { FileText, Github, Twitter } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
-const Footer = () => {
+const Footer: React.FC = () => {
     return (
         <footer className="bg-art-black text-white pt-20 pb-10 border-t-2 border-art-black">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

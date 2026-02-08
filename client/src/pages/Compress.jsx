@@ -56,6 +56,15 @@ const Compress = () => {
             const url = window.URL.createObjectURL(blob);
             setDownloadUrl(url);
 
+            // Save to History
+            const history = JSON.parse(localStorage.getItem('pdfHistory') || '[]');
+            const newEntry = {
+                type: 'COMPRESS',
+                fileName: `compressed-${Date.now()}.pdf`,
+                date: new Date().toISOString()
+            };
+            localStorage.setItem('pdfHistory', JSON.stringify([newEntry, ...history].slice(0, 10)));
+
             if (compressedSize) {
                 const originalSize = files[0].size;
                 const saved = originalSize - compressedSize;

@@ -77,7 +77,7 @@ const Landing = () => {
                                 Combine multiple files into a single master document. Drag, drop, and reorganize with precision.
                             </p>
                             <Link to="/merge" className="text-sm font-bold uppercase underline decoration-2 decoration-acid-yellow underline-offset-4 hover:bg-acid-yellow transition-colors">
-                                Try Merge ->
+                                Try Merge &rarr;
                             </Link>
                         </div>
 
@@ -89,7 +89,7 @@ const Landing = () => {
                                 Extract specific pages or divide documents. Precision tools for exact requirements.
                             </p>
                             <Link to="/split" className="text-sm font-bold uppercase underline decoration-2 decoration-electric-cyan underline-offset-4 hover:bg-electric-cyan transition-colors">
-                                Try Split ->
+                                Try Split &rarr;
                             </Link>
                         </div>
 
@@ -101,8 +101,45 @@ const Landing = () => {
                                 Optimize file size without losing quality. AI-driven compression algorithms.
                             </p>
                             <Link to="/compress" className="text-sm font-bold uppercase underline decoration-2 decoration-hot-pink underline-offset-4 hover:bg-hot-pink transition-colors">
-                                Try Compress ->
+                                Try Compress &rarr;
                             </Link>
+                        </div>
+                    </div>
+                </section>
+
+                {/* How It Works Section */}
+                <section className="py-24 border-x-2 border-art-black max-w-7xl mx-auto px-4 bg-art-gray dark:bg-art-zinc text-art-black dark:text-art-white border-y-2">
+                    <div className="text-center mb-16">
+                        <h2 className="text-4xl md:text-6xl font-black uppercase mb-4">How It Works</h2>
+                        <p className="text-xl font-bold text-gray-500 max-w-2xl mx-auto">Simple, transparent, and secure by design.</p>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                        <div className="flex flex-col items-center text-center p-6">
+                            <div className="w-20 h-20 bg-acid-yellow rounded-full flex items-center justify-center border-2 border-art-black mb-6 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] dark:shadow-white">
+                                <span className="text-3xl font-black text-black">1</span>
+                            </div>
+                            <h3 className="text-2xl font-black uppercase mb-3">Upload</h3>
+                            <p className="font-medium">Drag & drop your PDF files into our secure uploader. All processing happens on encrypted servers.</p>
+                        </div>
+
+                        <div className="flex flex-col items-center text-center p-6 relative">
+                            {/* Arrow for desktop */}
+                            <div className="hidden md:block absolute top-10 -right-1/2 w-full h-1 bg-art-black z-0"></div>
+
+                            <div className="w-20 h-20 bg-electric-cyan rounded-full flex items-center justify-center border-2 border-art-black mb-6 relative z-10 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] dark:shadow-white">
+                                <span className="text-3xl font-black text-black">2</span>
+                            </div>
+                            <h3 className="text-2xl font-black uppercase mb-3">Process</h3>
+                            <p className="font-medium">Our optimized algorithms split, merge, or compress your files in milliseconds.</p>
+                        </div>
+
+                        <div className="flex flex-col items-center text-center p-6">
+                            <div className="w-20 h-20 bg-hot-pink rounded-full flex items-center justify-center border-2 border-art-black mb-6 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] dark:shadow-white">
+                                <span className="text-3xl font-black text-black">3</span>
+                            </div>
+                            <h3 className="text-2xl font-black uppercase mb-3">Done</h3>
+                            <p className="font-medium">Download your file instantly. For your privacy, we automatically delete all files after 1 hour.</p>
                         </div>
                     </div>
                 </section>

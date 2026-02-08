@@ -56,6 +56,15 @@ const Split = () => {
             const url = window.URL.createObjectURL(blob);
             setDownloadUrl(url);
 
+            // Save to History
+            const history = JSON.parse(localStorage.getItem('pdfHistory') || '[]');
+            const newEntry = {
+                type: 'SPLIT',
+                fileName: `split-${Date.now()}.pdf`,
+                date: new Date().toISOString()
+            };
+            localStorage.setItem('pdfHistory', JSON.stringify([newEntry, ...history].slice(0, 10)));
+
         } catch (err) {
             console.error(err);
             setError(err.message || 'An error occurred while splitting the file.');

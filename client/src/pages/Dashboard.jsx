@@ -109,6 +109,46 @@ const Dashboard = () => {
                             </div>
                         </div>
                     </div>
+
+                    {/* Recent Activity (Client-Side History) */}
+                    <div className="mt-16 animate-slide-up" style={{ animationDelay: '0.6s' }}>
+                        <h2 className="text-3xl font-black uppercase mb-8 border-l-4 border-art-black pl-4">Recent Activity</h2>
+                        <div className="border-2 border-art-black bg-white">
+                            {(() => {
+                                const history = JSON.parse(localStorage.getItem('pdfHistory') || '[]');
+                                if (history.length === 0) {
+                                    return (
+                                        <div className="p-8 text-center text-gray-400 italic">
+                                            No recent activity. Start by using a tool above.
+                                        </div>
+                                    );
+                                }
+                                return (
+                                    <div className="divide-y-2 divide-art-black">
+                                        {history.map((item, idx) => (
+                                            <div key={idx} className="p-4 flex items-center justify-between hover:bg-gray-50 transition-colors">
+                                                <div className="flex items-center gap-4">
+                                                    <div className={`p-2 border-2 border-art-black ${item.type === 'MERGE' ? 'bg-acid-yellow' :
+                                                            item.type === 'SPLIT' ? 'bg-electric-cyan' : 'bg-hot-pink'
+                                                        }`}>
+                                                        {item.type === 'MERGE' ? <Layers className="w-4 h-4" /> :
+                                                            item.type === 'SPLIT' ? <Scissors className="w-4 h-4" /> : <Minimize2 className="w-4 h-4 text-white" />}
+                                                    </div>
+                                                    <div>
+                                                        <div className="font-bold uppercase text-sm">{item.fileName}</div>
+                                                        <div className="text-xs text-gray-500 font-medium">{new Date(item.date).toLocaleString()}</div>
+                                                    </div>
+                                                </div>
+                                                <div className="font-mono text-xs font-bold text-gray-400">
+                                                    {item.type}
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                );
+                            })()}
+                        </div>
+                    </div>
                 </div>
             </main>
 

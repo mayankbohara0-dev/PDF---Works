@@ -1,11 +1,21 @@
 const { PDFDocument } = require('pdf-lib');
 const fs = require('fs');
 const path = require('path');
+const { isValidPdf } = require('../utils/validation');
 
 const mergePdfs = async (req, res) => {
     try {
         if (!req.files || req.files.length < 2) {
             return res.status(400).json({ message: 'At least 2 files are required.' });
+        }
+
+        // Validate all files first
+        for (const file of req.files) {
+            if (!isValidPdf(file.path)) {
+                // Cleanup invalid file immediately
+                fs.unlink(file.path, () => { });
+                return res.status(400).json({ message: `File ${file.originalname} is not a valid PDF.` });
+            }
         }
 
         const mergedPdf = await PDFDocument.create();
@@ -55,6 +65,12 @@ const splitPdf = async (req, res) => {
         }
 
         const file = req.files[0];
+
+        if (!isValidPdf(file.path)) {
+            fs.unlink(file.path, () => { });
+            return res.status(400).json({ message: 'Invalid PDF file.' });
+        }
+
         const ranges = req.body.ranges; // "1-2, 5, 7-9"
 
         if (!ranges) {
@@ -135,6 +151,12 @@ const compressPdf = async (req, res) => {
         }
 
         const file = req.files[0];
+
+        if (!isValidPdf(file.path)) {
+            fs.unlink(file.path, () => { });
+            return res.status(400).json({ message: 'Invalid PDF file.' });
+        }
+
         const fileBytes = fs.readFileSync(file.path);
 
         // PDF-Lib compression (re-saving with object stream optimization)
