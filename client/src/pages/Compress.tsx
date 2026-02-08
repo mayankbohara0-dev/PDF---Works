@@ -1,60 +1,69 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import FileUploader from '../components/FileUploader';
 import { Minimize2, ArrowLeft, Download, AlertCircle, Loader, CheckCircle } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
+import { useMutation } from '@tanstack/react-query';
+import api from '../api';
+
+interface SuccessStats {
+    original: string;
+    compressed: string;
+    percent: number | string;
+}
 
 const Compress = () => {
-    const [files, setFiles] = useState([]);
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState('');
-    const [successStats, setSuccessStats] = useState(null);
-    const [downloadUrl, setDownloadUrl] = useState(null);
-    const { user } = useAuth();
-    const token = user?.session?.access_token || 'mock-token';
+    const [files, setFiles] = useState<File[]>([]);
+    const [downloadUrl, setDownloadUrl] = useState<string | null>(null);
+    const [successStats, setSuccessStats] = useState<SuccessStats | null>(null);
 
-    const handleFilesSelected = (selectedFiles) => {
-        setFiles(selectedFiles);
-        setError('');
-        setSuccessStats(null);
-        setDownloadUrl(null);
-    };
+    // Cleanup object URL
+    useEffect(() => {
+        return () => {
+            if (downloadUrl) {
+                window.URL.revokeObjectURL(downloadUrl);
+            }
+        };
+    }, [downloadUrl]);
 
-    const handleCompress = async () => {
-        if (files.length === 0) {
-            setError('Please select a PDF file.');
-            return;
-        }
+    const mutation = useMutation({
+        mutationFn: async (filesToCompress: File[]) => {
+            const formData = new FormData();
+            // Server expects 'pdf' field as per routes/pdf.routes.js
+            formData.append('pdf', filesToCompress[0]);
 
-        setLoading(true);
-        setError('');
-        setSuccessStats(null);
-
-        const formData = new FormData();
-        formData.append('files', files[0]);
-
-        try {
-            const response = await fetch('http://localhost:5000/api/pdf/compress', {
-                method: 'POST',
+            const response = await api.post('/pdf/compress', formData, {
+                responseType: 'blob',
                 headers: {
-                    'Authorization': `Bearer ${token}`
+                    'Content-Type': 'multipart/form-data',
                 },
-                body: formData,
             });
 
-            if (!response.ok) {
-                const errData = await response.json();
-                throw new Error(errData.message || 'Compression failed');
-            }
-
-            // Get compressed size header if available
-            const compressedSize = response.headers.get('X-Compressed-Size');
-
-            const blob = await response.blob();
-            const url = window.URL.createObjectURL(blob);
+            const compressedSize = response.headers['x-compressed-size'];
+            return { blob: response.data, compressedSize };
+        },
+        onSuccess: ({ blob, compressedSize }, variables) => {
+            const url = window.URL.createObjectURL(new Blob([blob], { type: 'application/pdf' }));
             setDownloadUrl(url);
+
+            const file = variables[0];
+            if (compressedSize) {
+                const originalSize = file.size;
+                const saved = originalSize - Number(compressedSize);
+                const percent = Math.round((saved / originalSize) * 100);
+                setSuccessStats({
+                    original: (originalSize / 1024 / 1024).toFixed(2),
+                    compressed: (Number(compressedSize) / 1024 / 1024).toFixed(2),
+                    percent: percent > 0 ? percent : 0
+                });
+            } else {
+                setSuccessStats({
+                    original: (file.size / 1024 / 1024).toFixed(2),
+                    compressed: "?",
+                    percent: "?"
+                });
+            }
 
             // Save to History
             const history = JSON.parse(localStorage.getItem('pdfHistory') || '[]');
@@ -64,30 +73,19 @@ const Compress = () => {
                 date: new Date().toISOString()
             };
             localStorage.setItem('pdfHistory', JSON.stringify([newEntry, ...history].slice(0, 10)));
+        },
+    });
 
-            if (compressedSize) {
-                const originalSize = files[0].size;
-                const saved = originalSize - compressedSize;
-                const percent = Math.round((saved / originalSize) * 100);
-                setSuccessStats({
-                    original: (originalSize / 1024 / 1024).toFixed(2),
-                    compressed: (compressedSize / 1024 / 1024).toFixed(2),
-                    percent: percent > 0 ? percent : 0
-                });
-            } else {
-                setSuccessStats({
-                    original: (files[0].size / 1024 / 1024).toFixed(2),
-                    compressed: "?",
-                    percent: "?"
-                });
-            }
+    const handleFilesSelected = (selectedFiles: File[]) => {
+        setFiles(selectedFiles);
+        setDownloadUrl(null);
+        setSuccessStats(null);
+        mutation.reset();
+    };
 
-        } catch (err) {
-            console.error(err);
-            setError(err.message || 'An error occurred while compressing the file.');
-        } finally {
-            setLoading(false);
-        }
+    const handleCompress = () => {
+        if (files.length === 0) return;
+        mutation.mutate(files);
     };
 
     return (
@@ -123,10 +121,10 @@ const Compress = () => {
                             maxSizeInMB={100}
                         />
 
-                        {error && (
+                        {mutation.isError && (
                             <div className="mt-8 p-4 bg-red-100 border-2 border-red-500 text-red-600 font-bold flex items-center gap-3 animate-slide-up">
                                 <AlertCircle className="w-5 h-5 flex-shrink-0" />
-                                {error}
+                                {mutation.error instanceof Error ? mutation.error.message : 'An error occurred while compressing the file.'}
                             </div>
                         )}
 
@@ -166,10 +164,10 @@ const Compress = () => {
                         <div className="mt-8 flex justify-end">
                             <button
                                 onClick={handleCompress}
-                                disabled={loading || files.length === 0}
-                                className={`btn-brutal ${loading || files.length === 0 ? 'opacity-50 cursor-not-allowed filter grayscale' : ''} bg-hot-pink text-white hover:bg-black hover:text-hot-pink`}
+                                disabled={mutation.isPending || files.length === 0}
+                                className={`btn-brutal ${mutation.isPending || files.length === 0 ? 'opacity-50 cursor-not-allowed filter grayscale' : ''} bg-hot-pink text-white hover:bg-black hover:text-hot-pink`}
                             >
-                                {loading ? (
+                                {mutation.isPending ? (
                                     <span className="flex items-center gap-2">
                                         <Loader className="w-5 h-5 animate-spin" />
                                         OPTIMIZING...

@@ -1,59 +1,41 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import FileUploader from '../components/FileUploader';
 import { Scissors, ArrowLeft, Download, AlertCircle, Loader, CheckCircle } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
+import { useMutation } from '@tanstack/react-query';
+import api from '../api';
 
 const Split = () => {
-    const [files, setFiles] = useState([]);
+    const [files, setFiles] = useState<File[]>([]);
     const [ranges, setRanges] = useState('');
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState('');
-    const [downloadUrl, setDownloadUrl] = useState(null);
-    const { user } = useAuth();
-    const token = user?.session?.access_token || 'mock-token';
+    const [downloadUrl, setDownloadUrl] = useState<string | null>(null);
 
-    const handleFilesSelected = (selectedFiles) => {
-        setFiles(selectedFiles);
-        setError('');
-        setDownloadUrl(null);
-    };
+    // Cleanup
+    useEffect(() => {
+        return () => {
+            if (downloadUrl) window.URL.revokeObjectURL(downloadUrl);
+        };
+    }, [downloadUrl]);
 
-    const handleSplit = async () => {
-        if (files.length === 0) {
-            setError('Please select a PDF file.');
-            return;
-        }
-        if (!ranges.trim()) {
-            setError('Please specify page ranges (e.g., 1-3, 5).');
-            return;
-        }
+    const mutation = useMutation({
+        mutationFn: async ({ file, ranges }: { file: File; ranges: string }) => {
+            const formData = new FormData();
+            // Server expects 'pdf' field as per routes/pdf.routes.js
+            formData.append('pdf', file);
+            formData.append('ranges', ranges);
 
-        setLoading(true);
-        setError('');
-
-        const formData = new FormData();
-        formData.append('files', files[0]);
-        formData.append('ranges', ranges);
-
-        try {
-            const response = await fetch('http://localhost:5000/api/pdf/split', {
-                method: 'POST',
+            const response = await api.post('/pdf/split', formData, {
+                responseType: 'blob',
                 headers: {
-                    'Authorization': `Bearer ${token}`
+                    'Content-Type': 'multipart/form-data',
                 },
-                body: formData,
             });
-
-            if (!response.ok) {
-                const errData = await response.json();
-                throw new Error(errData.message || 'Split failed');
-            }
-
-            const blob = await response.blob();
-            const url = window.URL.createObjectURL(blob);
+            return response.data;
+        },
+        onSuccess: (data) => {
+            const url = window.URL.createObjectURL(new Blob([data], { type: 'application/pdf' }));
             setDownloadUrl(url);
 
             // Save to History
@@ -64,13 +46,20 @@ const Split = () => {
                 date: new Date().toISOString()
             };
             localStorage.setItem('pdfHistory', JSON.stringify([newEntry, ...history].slice(0, 10)));
+        },
+    });
 
-        } catch (err) {
-            console.error(err);
-            setError(err.message || 'An error occurred while splitting the file.');
-        } finally {
-            setLoading(false);
-        }
+    const handleFilesSelected = (selectedFiles: File[]) => {
+        setFiles(selectedFiles);
+        setDownloadUrl(null); // Clear previous result
+        mutation.reset();
+    };
+
+    const handleSplit = () => {
+        if (files.length === 0) return;
+        if (!ranges.trim()) return;
+
+        mutation.mutate({ file: files[0], ranges });
     };
 
     return (
@@ -118,10 +107,17 @@ const Split = () => {
                             <p className="text-xs font-bold text-gray-400 mt-2 uppercase tracking-wide">Separate ranges with commas (e.g. 1-5, 8, 11-13)</p>
                         </div>
 
-                        {error && (
+                        {mutation.isError && (
                             <div className="mt-8 p-4 bg-red-100 border-2 border-red-500 text-red-600 font-bold flex items-center gap-3 animate-slide-up">
                                 <AlertCircle className="w-5 h-5 flex-shrink-0" />
-                                {error}
+                                {mutation.error instanceof Error ? mutation.error.message : 'An error occurred while splitting the file.'}
+                            </div>
+                        )}
+
+                        {!ranges.trim() && files.length > 0 && !mutation.isError && (
+                            <div className="mt-4 p-2 text-blue-600 font-medium text-sm flex items-center gap-2">
+                                <AlertCircle className="w-4 h-4" />
+                                Please specify the pages you want to extract.
                             </div>
                         )}
 
@@ -147,10 +143,10 @@ const Split = () => {
                         <div className="mt-8 flex justify-end">
                             <button
                                 onClick={handleSplit}
-                                disabled={loading || files.length === 0}
-                                className={`btn-brutal ${loading || files.length === 0 ? 'opacity-50 cursor-not-allowed filter grayscale' : ''} bg-electric-cyan text-black hover:bg-black hover:text-electric-cyan`}
+                                disabled={mutation.isPending || files.length === 0 || !ranges.trim()}
+                                className={`btn-brutal ${mutation.isPending || files.length === 0 || !ranges.trim() ? 'opacity-50 cursor-not-allowed filter grayscale' : ''} bg-electric-cyan text-black hover:bg-black hover:text-electric-cyan`}
                             >
-                                {loading ? (
+                                {mutation.isPending ? (
                                     <span className="flex items-center gap-2">
                                         <Loader className="w-5 h-5 animate-spin" />
                                         PROCESSING...

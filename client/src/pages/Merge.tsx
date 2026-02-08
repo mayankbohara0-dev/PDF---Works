@@ -1,57 +1,43 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import FileUploader from '../components/FileUploader';
 import { Layers, ArrowLeft, Download, AlertCircle, Loader, CheckCircle } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
+import { useMutation } from '@tanstack/react-query';
+import api from '../api';
 
 const Merge = () => {
-    const [files, setFiles] = useState([]);
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState('');
-    const [downloadUrl, setDownloadUrl] = useState(null);
-    const { user } = useAuth();
+    const [files, setFiles] = useState<File[]>([]);
+    const [downloadUrl, setDownloadUrl] = useState<string | null>(null);
 
-    // Use token from session if available, otherwise mock token
-    const token = user?.session?.access_token || 'mock-token';
+    // Cleanup object URL on unmount or when url changes
+    useEffect(() => {
+        return () => {
+            if (downloadUrl) {
+                window.URL.revokeObjectURL(downloadUrl);
+            }
+        };
+    }, [downloadUrl]);
 
-    const handleFilesSelected = (selectedFiles) => {
-        setFiles(selectedFiles);
-        setError('');
-        setDownloadUrl(null);
-    };
-
-    const handleMerge = async () => {
-        if (files.length < 2) {
-            setError('Please select at least 2 PDF files to merge.');
-            return;
-        }
-
-        setLoading(true);
-        setError('');
-
-        const formData = new FormData();
-        files.forEach((file) => {
-            formData.append('files', file);
-        });
-
-        try {
-            const response = await fetch('http://localhost:5000/api/pdf/merge', {
-                method: 'POST',
-                headers: {
-                    'Authorization': `Bearer ${token}`
-                },
-                body: formData,
+    const mutation = useMutation({
+        mutationFn: async (filesToMerge: File[]) => {
+            const formData = new FormData();
+            filesToMerge.forEach((file) => {
+                formData.append('pdfs', file);
             });
 
-            if (!response.ok) {
-                const errData = await response.json();
-                throw new Error(errData.message || 'Merge failed');
-            }
-
-            const blob = await response.blob();
-            const url = window.URL.createObjectURL(blob);
+            const response = await api.post('/pdf/merge', formData, {
+                responseType: 'blob',
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+            });
+            return response.data;
+        },
+        onSuccess: (data) => {
+            // Create a new blob object URL
+            const url = window.URL.createObjectURL(new Blob([data], { type: 'application/pdf' }));
             setDownloadUrl(url);
 
             // Save to History
@@ -62,13 +48,18 @@ const Merge = () => {
                 date: new Date().toISOString()
             };
             localStorage.setItem('pdfHistory', JSON.stringify([newEntry, ...history].slice(0, 10)));
+        },
+    });
 
-        } catch (err) {
-            console.error(err);
-            setError(err.message || 'An error occurred while merging files.');
-        } finally {
-            setLoading(false);
-        }
+    const handleFilesSelected = (selectedFiles: File[]) => {
+        setFiles(selectedFiles);
+        setDownloadUrl(null);
+        mutation.reset();
+    };
+
+    const handleMerge = () => {
+        if (files.length < 2) return;
+        mutation.mutate(files);
     };
 
     return (
@@ -104,10 +95,17 @@ const Merge = () => {
                             maxSizeInMB={100}
                         />
 
-                        {error && (
+                        {mutation.isError && (
                             <div className="mt-8 p-4 bg-red-100 border-2 border-red-500 text-red-600 font-bold flex items-center gap-3 animate-slide-up">
                                 <AlertCircle className="w-5 h-5 flex-shrink-0" />
-                                {error}
+                                {mutation.error instanceof Error ? mutation.error.message : 'An error occurred while merging files.'}
+                            </div>
+                        )}
+
+                        {files.length > 0 && files.length < 2 && !mutation.isError && (
+                            <div className="mt-4 p-2 text-orange-600 font-medium text-sm flex items-center gap-2">
+                                <AlertCircle className="w-4 h-4" />
+                                Please select at least 2 files to merge.
                             </div>
                         )}
 
@@ -133,10 +131,10 @@ const Merge = () => {
                         <div className="mt-8 flex justify-end">
                             <button
                                 onClick={handleMerge}
-                                disabled={loading || files.length < 2}
-                                className={`btn-brutal ${loading || files.length < 2 ? 'opacity-50 cursor-not-allowed filter grayscale' : ''}`}
+                                disabled={mutation.isPending || files.length < 2}
+                                className={`btn-brutal ${mutation.isPending || files.length < 2 ? 'opacity-50 cursor-not-allowed filter grayscale' : ''}`}
                             >
-                                {loading ? (
+                                {mutation.isPending ? (
                                     <span className="flex items-center gap-2">
                                         <Loader className="w-5 h-5 animate-spin" />
                                         PROCESSING...
