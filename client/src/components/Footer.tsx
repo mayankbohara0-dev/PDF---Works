@@ -1,5 +1,5 @@
 import React from 'react';
-import { FileText, Github, Twitter } from 'lucide-react';
+import { FileText, Github, Twitter, Heart } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const Footer: React.FC = () => {
@@ -50,8 +50,11 @@ const Footer: React.FC = () => {
                     </div>
                 </div>
 
-                <div className="border-t border-gray-100 pt-8 flex flex-col md:flex-row justify-center items-center gap-4 text-sm font-medium text-gray-400">
+                <div className="border-t border-gray-100 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-sm font-medium text-gray-400">
                     <p>© 2026 PDFWorks Inc. All rights reserved.</p>
+                    <p className="flex items-center gap-1">
+                        Made with <Heart className="w-4 h-4 text-red-400 fill-current" />
+                    </p>
                 </div>
             </div>
         </footer>
