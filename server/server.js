@@ -45,7 +45,7 @@ app.use('/api/pdf', require('./routes/pdf.routes'));
 
 // Root Route
 app.get('/', (req, res) => {
-    res.send('PDFWorks API is running');
+    res.send('SwiftPDF API is running');
 });
 
 // Start Cleanup Job

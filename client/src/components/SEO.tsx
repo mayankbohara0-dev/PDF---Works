@@ -14,9 +14,9 @@ const SEO: React.FC<SEOProps> = ({
     description,
     keywords = "pdf, merge pdf, split pdf, compress pdf, free pdf tools",
     image = "/og-image.png",
-    url = "https://pdfworks.app"
+    url = "https://swiftpdf.app"
 }) => {
-    const siteTitle = "PDFWorks";
+    const siteTitle = "SwiftPDF";
     const fullTitle = `${title} | ${siteTitle}`;
 
     return (

@@ -34,7 +34,7 @@ const Login = () => {
         <div className="min-h-screen flex items-center justify-center bg-secondary font-body p-4">
             <SEO
                 title="Login"
-                description="Access your PDFWorks account to manage your files and history."
+                description="Access your SwiftPDF account to manage your files and history."
             />
 
             {/* Background Decorations */}
@@ -55,7 +55,7 @@ const Login = () => {
                             <div className="bg-white/20 p-2 rounded-xl backdrop-blur-sm group-hover:scale-110 transition-transform">
                                 <FileText className="h-6 w-6 text-white" />
                             </div>
-                            <span className="text-2xl font-bold tracking-tight">PDFWorks</span>
+                            <span className="text-2xl font-bold tracking-tight">SwiftPDF</span>
                         </Link>
 
                         <div className="mt-12">
@@ -82,7 +82,7 @@ const Login = () => {
                 <div className="w-full md:w-1/2 p-8 md:p-12 lg:p-16 bg-white flex flex-col justify-center">
                     <div className="mb-10 text-center md:text-left">
                         <Link to="/" className="md:hidden inline-flex items-center gap-2 mb-6 text-primary font-bold">
-                            <FileText className="h-5 w-5" /> PDFWorks
+                            <FileText className="h-5 w-5" /> SwiftPDF
                         </Link>
                         <h2 className="text-3xl font-bold text-text-main mb-2">Sign In</h2>
                         <p className="text-text-body">Please enter your details.</p>

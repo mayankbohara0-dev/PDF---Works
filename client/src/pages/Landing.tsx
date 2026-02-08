@@ -247,10 +247,10 @@ const Landing = () => {
 
                         <div className="space-y-6">
                             {[
-                                { q: 'Is PDFWorks really free?', a: 'Yes! All our tools are 100% free to use for standard tasks. We believe in open access to productivity.' },
+                                { q: 'Is SwiftPDF really free?', a: 'Yes! All our tools are 100% free to use for standard tasks. We believe in open access to productivity.' },
                                 { q: 'Are my files safe?', a: 'Absolutely. We process your files securely and they are automatically deleted from our servers after processing. We do not peek at your data.' },
                                 { q: 'Is there a file size limit?', a: 'Currently, we support files up to 100MB, which covers most standard documents and ebooks.' },
-                                { q: 'Can I use it on mobile?', a: 'Yes, PDFWorks is fully responsive and works great on smartphones and tablets.' }
+                                { q: 'Can I use it on mobile?', a: 'Yes, SwiftPDF is fully responsive and works great on smartphones and tablets.' }
                             ].map((faq, idx) => (
                                 <div key={idx} className="bg-secondary rounded-2xl p-8 hover:shadow-md transition-shadow">
                                     <h3 className="text-xl font-bold text-text-main mb-3">{faq.q}</h3>
@@ -272,7 +272,7 @@ const Landing = () => {
                 <section className="py-24 px-4 text-center">
                     <div className="max-w-4xl mx-auto">
                         <h2 className="text-4xl lg:text-6xl font-bold mb-8 text-text-main">Ready to simplify your workflow?</h2>
-                        <p className="text-xl text-text-body mb-10 max-w-2xl mx-auto">Join thousands of users who trust PDFWorks for their daily document needs.</p>
+                        <p className="text-xl text-text-body mb-10 max-w-2xl mx-auto">Join thousands of users who trust SwiftPDF for their daily document needs.</p>
                         <Link
                             to="/signup"
                             className="btn-primary text-lg px-12 py-5 shadow-glow hover:shadow-primary/60"

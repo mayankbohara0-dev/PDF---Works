@@ -26,7 +26,7 @@ const Navbar: React.FC = () => {
                             <div className="bg-primary text-white p-2 rounded-xl shadow-lg shadow-primary/30 group-hover:scale-110 transition-transform">
                                 <FileText className="h-6 w-6" />
                             </div>
-                            <span className="text-2xl font-bold tracking-tight text-text-main group-hover:text-primary transition-colors">PDFWorks</span>
+                            <span className="text-2xl font-bold tracking-tight text-text-main group-hover:text-primary transition-colors">SwiftPDF</span>
                         </Link>
                     </div>
 

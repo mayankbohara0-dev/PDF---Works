@@ -33,7 +33,7 @@ const Signup = () => {
         <div className="min-h-screen flex items-center justify-center bg-secondary font-body p-4">
             <SEO
                 title="Sign Up"
-                description="Create a free PDFWorks account to start merging, splitting, and compressing PDFs."
+                description="Create a free SwiftPDF account to start merging, splitting, and compressing PDFs."
             />
 
             {/* Background Decorations */}
@@ -54,7 +54,7 @@ const Signup = () => {
                             <div className="bg-white/30 p-2 rounded-xl backdrop-blur-sm group-hover:scale-110 transition-transform">
                                 <FileText className="h-6 w-6 text-text-main" />
                             </div>
-                            <span className="text-2xl font-bold tracking-tight">PDFWorks</span>
+                            <span className="text-2xl font-bold tracking-tight">SwiftPDF</span>
                         </Link>
 
                         <div className="mt-12">
@@ -87,7 +87,7 @@ const Signup = () => {
                 <div className="w-full md:w-1/2 p-8 md:p-12 lg:p-16 bg-white flex flex-col justify-center">
                     <div className="mb-10 text-center md:text-left">
                         <Link to="/" className="md:hidden inline-flex items-center gap-2 mb-6 text-primary font-bold">
-                            <FileText className="h-5 w-5" /> PDFWorks
+                            <FileText className="h-5 w-5" /> SwiftPDF
                         </Link>
                         <h2 className="text-3xl font-bold text-text-main mb-2">Create Account</h2>
                         <p className="text-text-body">Get started in seconds. No credit card required.</p>

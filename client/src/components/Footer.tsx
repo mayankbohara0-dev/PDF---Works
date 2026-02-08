@@ -12,7 +12,7 @@ const Footer: React.FC = () => {
                             <div className="bg-primary/10 p-2 rounded-xl text-primary">
                                 <FileText className="h-6 w-6" />
                             </div>
-                            <span className="text-2xl font-bold text-text-main tracking-tight">PDFWorks</span>
+                            <span className="text-2xl font-bold text-text-main tracking-tight">SwiftPDF</span>
                         </div>
                         <p className="text-text-body font-medium leading-relaxed">
                             Making PDF tools simple, friendly, and accessible for everyone.
@@ -51,7 +51,7 @@ const Footer: React.FC = () => {
                 </div>
 
                 <div className="border-t border-gray-100 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-sm font-medium text-gray-400">
-                    <p>© 2026 PDFWorks Inc. All rights reserved.</p>
+                    <p>© 2026 SwiftPDF Inc. All rights reserved.</p>
                     <p className="flex items-center gap-1">
                         Made with <Heart className="w-4 h-4 text-red-400 fill-current" />
                     </p>
