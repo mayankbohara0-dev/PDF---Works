@@ -1,5 +1,6 @@
 const { PDFDocument } = require('pdf-lib');
 const fs = require('fs');
+const os = require('os');
 const path = require('path');
 const { isValidPdf } = require('../utils/validation');
 
@@ -29,12 +30,9 @@ const mergePdfs = async (req, res) => {
 
         const mergedPdfBytes = await mergedPdf.save();
         const fileName = `merged-${Date.now()}.pdf`;
-        const outputPath = path.join(__dirname, '../processed', fileName);
+        const outputPath = path.join(os.tmpdir(), fileName);
 
-        // Ensure processed directory
-        if (!fs.existsSync(path.dirname(outputPath))) {
-            fs.mkdirSync(path.dirname(outputPath), { recursive: true });
-        }
+        // No need to ensure directory exists for os.tmpdir()
 
         fs.writeFileSync(outputPath, mergedPdfBytes);
 
@@ -125,11 +123,7 @@ const splitPdf = async (req, res) => {
 
         const outputBytes = await outputPdf.save();
         const fileName = `split-${Date.now()}.pdf`;
-        const outputPath = path.join(__dirname, '../processed', fileName);
-
-        if (!fs.existsSync(path.dirname(outputPath))) {
-            fs.mkdirSync(path.dirname(outputPath), { recursive: true });
-        }
+        const outputPath = path.join(os.tmpdir(), fileName);
 
         fs.writeFileSync(outputPath, outputBytes);
 
@@ -171,11 +165,7 @@ const compressPdf = async (req, res) => {
         const outputBytes = await compressedPdf.save({ useObjectStreams: false });
 
         const fileName = `compressed-${Date.now()}.pdf`;
-        const outputPath = path.join(__dirname, '../processed', fileName);
-
-        if (!fs.existsSync(path.dirname(outputPath))) {
-            fs.mkdirSync(path.dirname(outputPath), { recursive: true });
-        }
+        const outputPath = path.join(os.tmpdir(), fileName);
 
         fs.writeFileSync(outputPath, outputBytes);
 
