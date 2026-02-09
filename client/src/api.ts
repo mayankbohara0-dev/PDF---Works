@@ -1,5 +1,6 @@
 import axios, { InternalAxiosRequestConfig } from 'axios';
 import { supabase } from './supabase';
+import { toast } from 'sonner';
 
 const api = axios.create({
     // Direct connection to backend - bypasses Vite proxy to avoid path issues
@@ -23,6 +24,39 @@ api.interceptors.request.use(
         return config;
     },
     (error) => Promise.reject(error)
+);
+
+// Add a response interceptor to handle common errors automatically
+api.interceptors.response.use(
+    (response) => response,
+    (error) => {
+        // Handle Network Errors (Backend not running)
+        if (error.code === 'ERR_NETWORK') {
+            toast.error("Backend Server Not Reachable", {
+                description: "Is the server running? Check backend terminal.",
+                duration: 5000,
+            });
+            console.error("[Auto-Diagnose] Network Error - Backend likely down");
+        }
+
+        // Handle 404 Errors (Wrong URL)
+        else if (error.response?.status === 404) {
+            toast.error("API Endpoint Not Found", {
+                description: `URL: ${error.config.url} - Check backend logs!`,
+                duration: 5000,
+            });
+            console.error(`[Auto-Diagnose] 404 Not Found: ${error.config.url}`);
+        }
+
+        // Handle 401 Errors (Not Logged In)
+        else if (error.response?.status === 401) {
+            toast.warning("Authentication Required", {
+                description: "Please login again to continue.",
+            });
+        }
+
+        return Promise.reject(error);
+    }
 );
 
 export default api;
