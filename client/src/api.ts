@@ -2,7 +2,9 @@ import axios, { InternalAxiosRequestConfig } from 'axios';
 import { supabase } from './supabase';
 
 const api = axios.create({
-    baseURL: import.meta.env.VITE_API_URL || '/api',
+    // Direct connection to backend - bypasses Vite proxy to avoid path issues
+    baseURL: 'http://localhost:5000/api',
+    withCredentials: true, // Important for CORS
     headers: {
         'Content-Type': 'application/json',
     },

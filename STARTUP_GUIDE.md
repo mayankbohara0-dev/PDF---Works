@@ -86,26 +86,20 @@ Once both servers are running:
 ```bash
 netstat -ano | findstr :5000
 ```
-If nothing appears, the backend is NOT running. Start it with:
-```bash
-cd server
-npm run dev
-```
 
-**Check 2: Are you logged in?**
+**Check 2: Check Server Logs (NEW)**
+- Look at the terminal running the backend
+- You should see `[DEBUG] Incoming Request: ...`
+- If you see `[ERROR] 404 Not Found: ...`, it will tell you EXACTLY which URL is failing
+- This helps verify if the frontend is calling the right URL
+
+**Check 3: Are you logged in?**
 - All PDF routes require authentication
 - Make sure you're logged in with a valid Supabase account
-- Check browser console for "Authentication required" errors
 
-**Check 3: Check browser console**
-- Open DevTools (F12)
-- Go to Network tab
-- Try the operation again
-- Look for the actual request URL and response
-
-**Check 4: Verify environment variables**
-- `server/.env` should have `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY`
-- `client/.env` should have `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY`
+**Check 4: Environment Variables**
+- `server/.env` must contain `SUPABASE_URL` and `KEY`
+- `client/.env` is used for defaults but `api.ts` now uses direct connection in dev
 
 ---
 

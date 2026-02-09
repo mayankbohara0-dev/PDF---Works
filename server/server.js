@@ -14,33 +14,22 @@ const PORT = process.env.PORT || 5000;
 app.use(express.json({ limit: '100mb' }));
 app.use(express.urlencoded({ extended: true, limit: '100mb' }));
 
-// CORS Configuration - Allow all localhost origins
-const corsOptions = {
-    origin: function (origin, callback) {
-        // Allow requests with no origin (like mobile apps or curl requests)
-        if (!origin) return callback(null, true);
-
-        // Allow all localhost origins
-        if (origin.startsWith('http://localhost:') || origin.startsWith('http://127.0.0.1:')) {
-            return callback(null, true);
-        }
-
-        // In production, add your production domain here
-        const allowedOrigins = process.env.ALLOWED_ORIGINS ? process.env.ALLOWED_ORIGINS.split(',') : [];
-        if (allowedOrigins.includes(origin)) {
-            return callback(null, true);
-        }
-
-        callback(new Error('Not allowed by CORS'));
-    },
+// CORS Configuration - Permissive for Development
+app.use(cors({
+    origin: true, // Reflects the request origin
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization']
-};
+}));
 
-app.use(cors(corsOptions));
 app.use(helmet());
 app.use(morgan('dev'));
+
+// Debug Middleware - Log every request URL
+app.use((req, res, next) => {
+    console.log(`[DEBUG] Incoming Request: ${req.method} ${req.url}`);
+    next();
+});
 
 // Request logging middleware
 app.use((req, res, next) => {
@@ -70,6 +59,12 @@ app.get('/', (req, res) => {
 
 // Start Cleanup Job
 cleanupArgs.startCleanupJob();
+
+// 404 Handler - Debugging
+app.use((req, res, next) => {
+    console.log(`[ERROR] 404 Not Found: ${req.method} ${req.originalUrl}`);
+    res.status(404).json({ message: `Route not found: ${req.method} ${req.originalUrl}` });
+});
 
 // Global Error Handler
 app.use((err, req, res, next) => {

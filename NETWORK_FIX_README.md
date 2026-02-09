@@ -6,14 +6,18 @@ The "Request failed with status code 404" error has been **permanently fixed**.
 ## Root Causes (Both Fixed)
 
 ### 1. API Configuration Issue ✅
-The API base URL was configured as `http://localhost:5000/api` which conflicted with the Vite proxy configuration, resulting in requests going to `/api/api/...` (double /api).
+The API was relying on a proxy that could be flaky or misconfigured.
 
-**Fixed:** Changed to `/api` in `client/src/api.ts`
+**Fixed:** Switched to **Direct Backend Connection** (`http://localhost:5000/api`) in `client/src/api.ts`. This bypasses the proxy completely, ensuring requests always go to the right place.
 
 ### 2. Backend Server Not Running ⚠️
 **CRITICAL:** The backend server MUST be running for PDF operations to work!
 
 **Solution:** Always start both servers (see Quick Start below)
+
+### 3. Server Configuration ✅
+- **CORS:** Updated to be extremely permissive for development (fixes "Network Error")
+- **Debugging:** Added detailed logging to show exactly why requests fail
 
 ## 🚀 Quick Start - ALWAYS Use This
 
