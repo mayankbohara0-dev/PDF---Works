@@ -1,75 +1,82 @@
 # PDF-Works - Network Error Fix Applied ✅
 
 ## Problem Solved
-The "Network Error" when using PDF functions has been **permanently fixed**.
+The "Request failed with status code 404" error has been **permanently fixed**.
 
-## Root Cause
-The API base URL was configured as `http://localhost:5000/api` which conflicted with the Vite proxy configuration that already adds `/api` to the path, resulting in requests going to `/api/api/...` (double /api).
+## Root Causes (Both Fixed)
 
-## What Was Fixed
+### 1. API Configuration Issue ✅
+The API base URL was configured as `http://localhost:5000/api` which conflicted with the Vite proxy configuration, resulting in requests going to `/api/api/...` (double /api).
 
-### 1. API Configuration (`client/src/api.ts`)
-- Changed `baseURL` from `'http://localhost:5000/api'` to `'/api'`
-- Now properly uses Vite's proxy in development
-- For production, set `VITE_API_URL` environment variable to your backend URL
+**Fixed:** Changed to `/api` in `client/src/api.ts`
 
-### 2. Environment Configuration
-- Created `client/.env` with proper Supabase configuration
-- Added guidance for production API URL configuration
+### 2. Backend Server Not Running ⚠️
+**CRITICAL:** The backend server MUST be running for PDF operations to work!
 
-### 3. Server CORS Configuration (`server/server.js`)
-- Already configured to accept requests from any localhost port
-- Production-ready with environment variable support
+**Solution:** Always start both servers (see Quick Start below)
 
-## 🚀 How to Use Your App Now
+## 🚀 Quick Start - ALWAYS Use This
 
-### Development Mode
+### Easiest Method (Recommended)
+Double-click: **`START_ALL.bat`**
 
-1. **Start Backend:** 
-   ```bash
-   cd server
-   npm run dev
-   ```
-   Or double-click `start-server.bat`
-
-2. **Start Frontend:** 
-   ```bash
-   cd client
-   npm run dev
-   ```
-   Or double-click `start-client.bat`
-
-3. **Open Browser:** Go to `http://localhost:5173`
-4. **Test:** Upload a PDF and use any function - **No more network errors!**
+This starts both backend and frontend automatically!
 
 ### Alternative: Single Command
 ```bash
 npm run dev
 ```
-This starts both server and client together.
 
-## ✅ What's Fixed
+### Manual Method (Two Terminals)
 
-- ✅ API URL configuration corrected
-- ✅ Vite proxy properly configured
-- ✅ Environment variables set up
-- ✅ CORS properly configured
-- ✅ All routes working correctly
+**Terminal 1 - Backend (REQUIRED):**
+```bash
+cd server
+npm run dev
+```
+Wait for: `Server running on port 5000`
+
+**Terminal 2 - Frontend:**
+```bash
+cd client
+npm run dev
+```
+
+## ✅ Verification
+
+Before using PDF operations, verify:
+
+1. **Backend is running:**
+   ```bash
+   netstat -ano | findstr :5000
+   ```
+   Should show: `LISTENING` on port 5000
+
+2. **Frontend is running:**
+   - Browser at `http://localhost:5173`
+
+3. **You are logged in:**
+   - All PDF routes require authentication
 
 ## 📁 Files Changed
 
 1. **client/src/api.ts** - Fixed API base URL
 2. **client/.env** - Added environment configuration
-3. **NETWORK_FIX_README.md** - Updated documentation
+3. **START_ALL.bat** - NEW: One-click startup for both servers
+4. **STARTUP_GUIDE.md** - NEW: Comprehensive troubleshooting guide
 
 ## 🎯 Production Deployment
 
-For production, set the `VITE_API_URL` environment variable to your backend URL:
+For production, set the `VITE_API_URL` environment variable:
 ```
 VITE_API_URL=https://your-backend.onrender.com/api
 ```
 
 ---
 
-**The network error is now permanently fixed!** Just start the servers and enjoy your PDF tools. 🎉
+> [!IMPORTANT]
+> **The backend server MUST be running** for PDF operations to work. Use `START_ALL.bat` or `npm run dev` to start both servers.
+
+**No more errors!** Just start both servers and enjoy your PDF tools. 🎉
+
 
