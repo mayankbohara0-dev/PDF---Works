@@ -18,7 +18,7 @@ const ToImage = () => {
             formData.append('pdf', params.file);
             formData.append('format', params.format);
 
-            const response = await api.post('/api/pdf/to-image', formData, {
+            const response = await api.post('/pdf/to-image', formData, {
                 headers: { 'Content-Type': 'multipart/form-data' },
                 responseType: 'blob',
             });

@@ -30,7 +30,7 @@ const Protect = () => {
             formData.append('allowModify', String(params.permissions.allowModify));
             formData.append('allowAnnotate', String(params.permissions.allowAnnotate));
 
-            const response = await api.post('/api/pdf/protect', formData, {
+            const response = await api.post('/pdf/protect', formData, {
                 headers: { 'Content-Type': 'multipart/form-data' },
                 responseType: 'blob',
             });

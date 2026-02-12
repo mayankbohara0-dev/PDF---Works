@@ -16,7 +16,7 @@ const Repair = () => {
             const formData = new FormData();
             formData.append('pdf', fileToRepair);
 
-            const response = await api.post('/api/pdf/repair', formData, {
+            const response = await api.post('/pdf/repair', formData, {
                 headers: { 'Content-Type': 'multipart/form-data' },
                 responseType: 'blob',
             });

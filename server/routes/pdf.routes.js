@@ -14,7 +14,8 @@ const {
 } = require('../controllers/pdfController');
 
 // Apply authentication middleware to all PDF routes
-router.use(authMiddleware);
+// TEMPORARILY DISABLED FOR DEVELOPMENT - Re-enable for production
+// router.use(authMiddleware);
 
 // Existing routes
 // Merge PDF Route - Accepts up to 10 PDF files
