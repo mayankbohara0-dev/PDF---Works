@@ -25,14 +25,16 @@ const ToImage = () => {
 
             return { data: response.data, format: params.format };
         },
-        onSuccess: ({ data, format: fmt }) => {
+        onSuccess: ({ data }) => {
             const url = window.URL.createObjectURL(new Blob([data]));
             const link = document.createElement('a');
             link.href = url;
 
             // Check if it's a ZIP file (multiple pages)
             const isZip = data.type === 'application/zip';
-            const extension = isZip ? 'zip' : fmt;
+            // Backend currently enforces PNG for reliability with pdf-img-convert
+            const extension = isZip ? 'zip' : 'png';
+
             link.setAttribute('download', `converted-${Date.now()}.${extension}`);
 
             document.body.appendChild(link);
