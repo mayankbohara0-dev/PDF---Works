@@ -13,6 +13,8 @@
   "license": "ISC",
   "type": "commonjs",
   "dependencies": {
+    "@pdfsmaller/pdf-encrypt-lite": "^1.0.1",
+    "@peculiar/pdf-repair": "^1.17.2",
     "@supabase/supabase-js": "^2.95.0",
     "archiver": "^7.0.1",
     "bcryptjs": "^3.0.3",
@@ -24,7 +26,8 @@
     "jsonwebtoken": "^9.0.3",
     "morgan": "^1.10.1",
     "multer": "^2.0.2",
-    "pdf-lib": "^1.17.1"
+    "pdf-lib": "^1.17.1",
+    "pdftoimg-js": "^0.2.5"
   },
   "devDependencies": {
     "nodemon": "^3.1.11"

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
-import { Layers, Scissors, Minimize2, ArrowRight, Star, Heart } from 'lucide-react';
+import { Layers, Scissors, Minimize2, ArrowRight, Star, Heart, Wrench, Image, Shield, FileText, Table } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 import SEO from '../components/SEO';
@@ -13,6 +13,17 @@ const Landing = () => {
     useEffect(() => {
         setMount(true);
     }, []);
+
+    const tools = [
+        { icon: Layers, title: 'Merge PDFs', desc: 'Combine multiple documents into one file.', path: '/merge', color: 'bg-blue-50 text-primary', btnColor: 'text-primary' },
+        { icon: Scissors, title: 'Split PDF', desc: 'Extract specific pages from your PDF.', path: '/split', color: 'bg-purple-50 text-purple-600', btnColor: 'text-purple-600' },
+        { icon: Minimize2, title: 'Compress PDF', desc: 'Reduce file size without losing quality.', path: '/compress', color: 'bg-pink-50 text-pink-600', btnColor: 'text-pink-600' },
+        { icon: Wrench, title: 'Repair PDF', desc: 'Fix corrupted or damaged PDF files.', path: '/repair', color: 'bg-orange-50 text-orange-600', btnColor: 'text-orange-600' },
+        { icon: Image, title: 'PDF to Image', desc: 'Convert pages to PNG, JPG, or WebP.', path: '/to-image', color: 'bg-green-50 text-green-600', btnColor: 'text-green-600' },
+        { icon: Shield, title: 'Protect PDF', desc: 'Add password encryption and permissions.', path: '/protect', color: 'bg-red-50 text-red-600', btnColor: 'text-red-600' },
+        { icon: FileText, title: 'PDF to Word', desc: 'Convert to editable DOCX (coming soon).', path: '/to-word', color: 'bg-blue-50 text-blue-600', btnColor: 'text-blue-600' },
+        { icon: Table, title: 'PDF to Excel', desc: 'Extract tables to XLSX (coming soon).', path: '/to-excel', color: 'bg-teal-50 text-teal-600', btnColor: 'text-teal-600' },
+    ];
 
     return (
         <div className="min-h-screen bg-secondary font-body overflow-x-hidden">
@@ -126,48 +137,25 @@ const Landing = () => {
                             <p className="text-lg text-text-body">Powerful features wrapped in a simple, friendly interface. No manuals required.</p>
                         </div>
 
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                            {/* Merge Card */}
-                            <div className="card-base group">
-                                <div className="w-16 h-16 bg-blue-50 text-primary rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
-                                    <Layers className="w-8 h-8" />
-                                </div>
-                                <h3 className="text-2xl font-bold mb-3 text-text-main">Merge PDFs</h3>
-                                <p className="text-text-body mb-8 leading-relaxed">
-                                    Combine multiple documents into a single, organized file. Perfect for reports and portfolios.
-                                </p>
-                                <Link to="/merge" className="inline-flex items-center font-bold text-primary group-hover:text-primary-dark">
-                                    Try Merging <ArrowRight className="ml-2 w-4 h-4" />
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                            {tools.map((tool, idx) => (
+                                <Link
+                                    key={idx}
+                                    to={tool.path}
+                                    className="card-base group hover:scale-[1.02] transition-transform duration-300"
+                                >
+                                    <div className={`w-14 h-14 ${tool.color} rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300`}>
+                                        <tool.icon className="w-7 h-7" />
+                                    </div>
+                                    <h3 className="text-xl font-bold mb-2 text-text-main">{tool.title}</h3>
+                                    <p className="text-sm text-text-body mb-4 leading-relaxed min-h-[40px]">
+                                        {tool.desc}
+                                    </p>
+                                    <div className={`inline-flex items-center font-bold text-sm ${tool.btnColor} group-hover:underline`}>
+                                        Try Now <ArrowRight className="ml-1 w-3 h-3" />
+                                    </div>
                                 </Link>
-                            </div>
-
-                            {/* Split Card */}
-                            <div className="card-base group">
-                                <div className="w-16 h-16 bg-purple-50 text-purple-600 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
-                                    <Scissors className="w-8 h-8" />
-                                </div>
-                                <h3 className="text-2xl font-bold mb-3 text-text-main">Split PDF</h3>
-                                <p className="text-text-body mb-8 leading-relaxed">
-                                    Extract specific pages or separate one big file into several smaller ones with ease.
-                                </p>
-                                <Link to="/split" className="inline-flex items-center font-bold text-purple-600 group-hover:text-purple-800">
-                                    Try Splitting <ArrowRight className="ml-2 w-4 h-4" />
-                                </Link>
-                            </div>
-
-                            {/* Compress Card */}
-                            <div className="card-base group">
-                                <div className="w-16 h-16 bg-pink-50 text-pink-600 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
-                                    <Minimize2 className="w-8 h-8" />
-                                </div>
-                                <h3 className="text-2xl font-bold mb-3 text-text-main">Compress PDF</h3>
-                                <p className="text-text-body mb-8 leading-relaxed">
-                                    Make your files smaller without losing quality. Save space and email faster.
-                                </p>
-                                <Link to="/compress" className="inline-flex items-center font-bold text-pink-600 group-hover:text-pink-800">
-                                    Try Compressing <ArrowRight className="ml-2 w-4 h-4" />
-                                </Link>
-                            </div>
+                            ))}
                         </div>
                     </div>
                 </section>

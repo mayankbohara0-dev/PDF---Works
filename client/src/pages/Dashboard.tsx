@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
-import { Layers, Scissors, Minimize2, ArrowRight, Zap, Clock, File } from 'lucide-react';
+import { Layers, Scissors, Minimize2, ArrowRight, Zap, Clock, File, Wrench, Image, Shield, FileText, Table } from 'lucide-react';
 
 interface HistoryItem {
     fileName: string;
@@ -44,6 +44,46 @@ const Dashboard = () => {
             path: "/compress",
             color: "bg-pink-50 text-pink-600",
             btnColor: "text-pink-600 group-hover:bg-pink-600 group-hover:text-white"
+        },
+        {
+            icon: Wrench,
+            title: "Repair PDF",
+            description: "Fix corrupted or damaged PDF files.",
+            path: "/repair",
+            color: "bg-orange-50 text-orange-600",
+            btnColor: "text-orange-600 group-hover:bg-orange-600 group-hover:text-white"
+        },
+        {
+            icon: Image,
+            title: "PDF to Image",
+            description: "Convert to PNG, JPG, or WebP images.",
+            path: "/to-image",
+            color: "bg-green-50 text-green-600",
+            btnColor: "text-green-600 group-hover:bg-green-600 group-hover:text-white"
+        },
+        {
+            icon: Shield,
+            title: "Protect PDF",
+            description: "Add password and set permissions.",
+            path: "/protect",
+            color: "bg-red-50 text-red-600",
+            btnColor: "text-red-600 group-hover:bg-red-600 group-hover:text-white"
+        },
+        {
+            icon: FileText,
+            title: "PDF to Word",
+            description: "Convert to DOCX (coming soon).",
+            path: "/to-word",
+            color: "bg-blue-50 text-blue-600",
+            btnColor: "text-blue-600 group-hover:bg-blue-600 group-hover:text-white"
+        },
+        {
+            icon: Table,
+            title: "PDF to Excel",
+            description: "Extract tables to XLSX (coming soon).",
+            path: "/to-excel",
+            color: "bg-teal-50 text-teal-600",
+            btnColor: "text-teal-600 group-hover:bg-teal-600 group-hover:text-white"
         }
     ];
 

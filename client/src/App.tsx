@@ -15,6 +15,11 @@ import ErrorBoundary from './components/ErrorBoundary';
 const Merge = lazy(() => import('./pages/Merge'));
 const Split = lazy(() => import('./pages/Split'));
 const Compress = lazy(() => import('./pages/Compress'));
+const Repair = lazy(() => import('./pages/Repair'));
+const ToImage = lazy(() => import('./pages/ToImage'));
+const Protect = lazy(() => import('./pages/Protect'));
+const ToWord = lazy(() => import('./pages/ToWord'));
+const ToExcel = lazy(() => import('./pages/ToExcel'));
 
 function App() {
   return (
@@ -35,10 +40,17 @@ function App() {
                   </ProtectedRoute>
                 }
               />
-              {/* Tool routes */}
+              {/* Existing tool routes */}
               <Route path="/merge" element={<ProtectedRoute><Merge /></ProtectedRoute>} />
               <Route path="/split" element={<ProtectedRoute><Split /></ProtectedRoute>} />
               <Route path="/compress" element={<ProtectedRoute><Compress /></ProtectedRoute>} />
+
+              {/* New tool routes */}
+              <Route path="/repair" element={<ProtectedRoute><Repair /></ProtectedRoute>} />
+              <Route path="/to-image" element={<ProtectedRoute><ToImage /></ProtectedRoute>} />
+              <Route path="/protect" element={<ProtectedRoute><Protect /></ProtectedRoute>} />
+              <Route path="/to-word" element={<ProtectedRoute><ToWord /></ProtectedRoute>} />
+              <Route path="/to-excel" element={<ProtectedRoute><ToExcel /></ProtectedRoute>} />
             </Routes>
           </Suspense>
         </AuthProvider>
