@@ -7,7 +7,7 @@ import { toast } from 'sonner';
 
 interface SortableItemProps {
     id: string;
-    file: File;
+    file: UploadedFile;
     onRemove: () => void;
 }
 
@@ -53,15 +53,12 @@ const SortableItem = ({ id, file, onRemove }: SortableItemProps) => {
     );
 };
 
-interface File {
+interface UploadedFile extends File {
     id: string;
-    name: string;
-    size: number;
-    type: string;
 }
 
 interface FileUploaderProps {
-    onFilesSelected: (files: File[]) => void;
+    onFilesSelected: (files: UploadedFile[]) => void;
     multiple?: boolean;
     maxFiles?: number;
     maxSizeInMB?: number;
@@ -69,7 +66,7 @@ interface FileUploaderProps {
 
 const FileUploader: React.FC<FileUploaderProps> = ({ onFilesSelected, multiple = false, maxFiles = 1, maxSizeInMB = 100 }) => {
     const [dragActive, setDragActive] = useState(false);
-    const [files, setFiles] = useState<File[]>([]);
+    const [files, setFiles] = useState<UploadedFile[]>([]);
     const [error, setError] = useState('');
     const inputRef = useRef<HTMLInputElement>(null);
 
@@ -81,7 +78,7 @@ const FileUploader: React.FC<FileUploaderProps> = ({ onFilesSelected, multiple =
     );
 
     const validateFiles = (newFiles: any[]) => {
-        const validFiles: File[] = [];
+        const validFiles: UploadedFile[] = [];
         let errorMessage = '';
 
         if (!multiple && newFiles.length + files.length > 1) {
@@ -103,7 +100,7 @@ const FileUploader: React.FC<FileUploaderProps> = ({ onFilesSelected, multiple =
             }
             // Add ID to file object
             (file as any).id = `${file.name}-${Date.now()}-${Math.random()}`;
-            validFiles.push(file as File);
+            validFiles.push(file as UploadedFile);
         }
 
         if (errorMessage && validFiles.length === 0) return errorMessage;

@@ -15,7 +15,7 @@ interface SuccessStats {
 }
 
 const Compress = () => {
-    const [files, setFiles] = useState<File[]>([]);
+    const [files, setFiles] = useState<(File & { id: string })[]>([]);
     const [downloadUrl, setDownloadUrl] = useState<string | null>(null);
     const [successStats, setSuccessStats] = useState<SuccessStats | null>(null);
 
@@ -76,7 +76,7 @@ const Compress = () => {
         },
     });
 
-    const handleFilesSelected = (selectedFiles: File[]) => {
+    const handleFilesSelected = (selectedFiles: (File & { id: string })[]) => {
         setFiles(selectedFiles);
         setDownloadUrl(null);
         setSuccessStats(null);
@@ -122,7 +122,7 @@ const Compress = () => {
                         <div className="absolute top-0 right-0 w-64 h-64 bg-pink-50 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 pointer-events-none"></div>
 
                         <FileUploader
-                            onFilesSelected={handleFilesSelected as any}
+                            onFilesSelected={handleFilesSelected}
                             multiple={false}
                             maxFiles={1}
                             maxSizeInMB={100}

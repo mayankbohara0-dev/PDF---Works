@@ -9,7 +9,7 @@ import api from '../api';
 import SEO from '../components/SEO';
 
 const Protect = () => {
-    const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
+    const [selectedFiles, setSelectedFiles] = useState<(File & { id: string })[]>([]);
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
@@ -53,7 +53,7 @@ const Protect = () => {
         }
     });
 
-    const handleFilesSelected = (files: File[]) => {
+    const handleFilesSelected = (files: (File & { id: string })[]) => {
         setSelectedFiles(files);
     };
 

@@ -9,7 +9,7 @@ import api from '../api';
 import SEO from '../components/SEO';
 
 const Merge = () => {
-    const [files, setFiles] = useState<File[]>([]);
+    const [files, setFiles] = useState<(File & { id: string })[]>([]);
     const [downloadUrl, setDownloadUrl] = useState<string | null>(null);
 
     // Cleanup object URL on unmount or when url changes
@@ -52,7 +52,7 @@ const Merge = () => {
         },
     });
 
-    const handleFilesSelected = (selectedFiles: File[]) => {
+    const handleFilesSelected = (selectedFiles: (File & { id: string })[]) => {
         setFiles(selectedFiles);
         setDownloadUrl(null);
         mutation.reset();
@@ -97,7 +97,7 @@ const Merge = () => {
                         <div className="absolute top-0 right-0 w-64 h-64 bg-primary/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 pointer-events-none"></div>
 
                         <FileUploader
-                            onFilesSelected={handleFilesSelected as any}
+                            onFilesSelected={handleFilesSelected}
                             multiple={true}
                             maxFiles={10}
                             maxSizeInMB={100}

@@ -9,7 +9,7 @@ import api from '../api';
 import SEO from '../components/SEO';
 
 const ToImage = () => {
-    const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
+    const [selectedFiles, setSelectedFiles] = useState<(File & { id: string })[]>([]);
     const [format, setFormat] = useState<'png' | 'jpg' | 'webp'>('png');
 
     const mutation = useMutation({
@@ -42,7 +42,7 @@ const ToImage = () => {
         }
     });
 
-    const handleFilesSelected = (files: File[]) => {
+    const handleFilesSelected = (files: (File & { id: string })[]) => {
         setSelectedFiles(files);
     };
 
@@ -102,8 +102,8 @@ const ToImage = () => {
                                                 key={fmt}
                                                 onClick={() => setFormat(fmt)}
                                                 className={`p-4 rounded-2xl border-2 font-bold text-sm uppercase transition-all ${format === fmt
-                                                        ? 'border-green-600 bg-green-50 text-green-600'
-                                                        : 'border-gray-200 bg-white text-gray-400 hover:border-green-300'
+                                                    ? 'border-green-600 bg-green-50 text-green-600'
+                                                    : 'border-gray-200 bg-white text-gray-400 hover:border-green-300'
                                                     }`}
                                             >
                                                 {fmt}

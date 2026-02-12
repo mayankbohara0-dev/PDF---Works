@@ -9,7 +9,7 @@ import api from '../api';
 import SEO from '../components/SEO';
 
 const Split = () => {
-    const [files, setFiles] = useState<File[]>([]);
+    const [files, setFiles] = useState<(File & { id: string })[]>([]);
     const [ranges, setRanges] = useState('');
     const [downloadUrl, setDownloadUrl] = useState<string | null>(null);
 
@@ -49,7 +49,7 @@ const Split = () => {
         },
     });
 
-    const handleFilesSelected = (selectedFiles: File[]) => {
+    const handleFilesSelected = (selectedFiles: (File & { id: string })[]) => {
         setFiles(selectedFiles);
         setDownloadUrl(null); // Clear previous result
         mutation.reset();
@@ -96,7 +96,7 @@ const Split = () => {
                         <div className="absolute top-0 right-0 w-64 h-64 bg-purple-50 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 pointer-events-none"></div>
 
                         <FileUploader
-                            onFilesSelected={handleFilesSelected as any}
+                            onFilesSelected={handleFilesSelected}
                             multiple={false}
                             maxFiles={1}
                             maxSizeInMB={100}

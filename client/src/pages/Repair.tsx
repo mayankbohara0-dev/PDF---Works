@@ -9,7 +9,7 @@ import api from '../api';
 import SEO from '../components/SEO';
 
 const Repair = () => {
-    const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
+    const [selectedFiles, setSelectedFiles] = useState<(File & { id: string })[]>([]);
 
     const mutation = useMutation({
         mutationFn: async (fileToRepair: File) => {
@@ -35,7 +35,7 @@ const Repair = () => {
         }
     });
 
-    const handleFilesSelected = (files: File[]) => {
+    const handleFilesSelected = (files: (File & { id: string })[]) => {
         setSelectedFiles(files);
     };
 
