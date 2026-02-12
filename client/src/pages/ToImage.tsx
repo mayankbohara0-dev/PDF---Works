@@ -139,7 +139,9 @@ const ToImage = () => {
                                 <AlertCircle className="w-5 h-5 flex-shrink-0 mt-0.5" />
                                 <div>
                                     <p className="font-bold mb-1">Conversion failed</p>
-                                    <p className="font-normal">Please make sure you uploaded a valid PDF file and try again.</p>
+                                    <p className="font-normal">
+                                        {(mutation.error as any)?.response?.data?.message || (mutation.error as Error).message || "Please make sure you uploaded a valid PDF file and try again."}
+                                    </p>
                                 </div>
                             </div>
                         )}
