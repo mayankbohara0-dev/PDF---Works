@@ -14,8 +14,16 @@ const isValidPdf = (filePath) => {
         fs.readSync(fd, buffer, 0, 4, 0);
         fs.closeSync(fd);
 
+        const signature = buffer.toString();
         // Check for %PDF signature (0x25 0x50 0x44 0x46)
-        return buffer.toString() === '%PDF';
+        const isValid = signature === '%PDF';
+
+        if (!isValid) {
+            console.log(`[Validation Debug] File: ${filePath}`);
+            console.log(`[Validation Debug] First 4 bytes: ${signature} (Hex: ${buffer.toString('hex')})`);
+        }
+
+        return isValid;
     } catch (error) {
         console.error('Validation Error:', error);
         return false;
