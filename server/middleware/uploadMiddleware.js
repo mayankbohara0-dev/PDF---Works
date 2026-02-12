@@ -17,9 +17,11 @@ const storage = multer.diskStorage({
 });
 
 const fileFilter = (req, file, cb) => {
+    console.log(`[Upload Debug] Checking file: ${file.originalname}, Mimetype: ${file.mimetype}`);
     if (file.mimetype === 'application/pdf') {
         cb(null, true);
     } else {
+        console.error(`[Upload Debug] Rejected file: ${file.originalname}, Mimetype: ${file.mimetype}`);
         cb(new Error('Only PDF files are allowed!'), false);
     }
 };
