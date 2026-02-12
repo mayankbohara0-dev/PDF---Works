@@ -25,6 +25,11 @@ const Footer: React.FC = () => {
                             <li><Link to="/merge" className="hover:text-primary transition-colors">Merge PDF</Link></li>
                             <li><Link to="/split" className="hover:text-primary transition-colors">Split PDF</Link></li>
                             <li><Link to="/compress" className="hover:text-primary transition-colors">Compress PDF</Link></li>
+                            <li><Link to="/repair" className="hover:text-primary transition-colors">Repair PDF</Link></li>
+                            <li><Link to="/to-image" className="hover:text-primary transition-colors">PDF to Image</Link></li>
+                            <li><Link to="/protect" className="hover:text-primary transition-colors">Protect PDF</Link></li>
+                            <li><Link to="/to-word" className="hover:text-primary transition-colors">PDF to Word</Link></li>
+                            <li><Link to="/to-excel" className="hover:text-primary transition-colors">PDF to Excel</Link></li>
                         </ul>
                     </div>
 
