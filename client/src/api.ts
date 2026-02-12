@@ -3,9 +3,9 @@ import { supabase } from './supabase';
 import { toast } from 'sonner';
 
 const api = axios.create({
-    // Direct connection to backend - bypasses Vite proxy to avoid path issues
-    baseURL: 'http://localhost:5000/api',
-    withCredentials: true, // Important for CORS
+    // Use environment variable for production, fallback to localhost for development
+    baseURL: import.meta.env.VITE_API_URL || 'http://localhost:5000/api',
+    withCredentials: true,
     headers: {
         'Content-Type': 'application/json',
     },
