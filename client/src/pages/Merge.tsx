@@ -4,6 +4,7 @@ import Footer from '../components/Footer';
 import FileUploader from '../components/FileUploader';
 import { Layers, ArrowLeft, AlertCircle, Loader, CheckCircle, FilePlus, ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import ViralLoop from '../components/ViralLoop';
 import { useMutation } from '@tanstack/react-query';
 import api from '../api';
 import SEO from '../components/SEO';
@@ -132,6 +133,7 @@ const Merge = () => {
                                 >
                                     Download Merged PDF
                                 </a>
+                                <ViralLoop />
                             </div>
                         )}
 

@@ -1,50 +1,34 @@
 @echo off
-REM SwiftPDF - Quick Start Script for Local Development
-REM This script starts both the backend and frontend servers
+REM SwiftPDF - Robust Start Script
+REM This script checks the environment and starts both servers in a single window.
+REM If one fails, they both close, making errors visible.
 
 echo ========================================
-echo   SwiftPDF - Starting Development Servers
+echo   SwiftPDF - Starting Development System
 echo ========================================
 echo.
 
-REM Check if node_modules exist
-if not exist "server\node_modules\" (
-    echo [ERROR] Server dependencies not installed!
-    echo Please run: cd server ^&^& npm install
+REM 1. Run Environment Check
+node check-env.js
+if %errorlevel% neq 0 (
+    echo.
+    echo [ERROR] Environment check failed!
+    echo Please fix the issues above and try again.
     pause
     exit /b 1
 )
 
-if not exist "client\node_modules\" (
-    echo [ERROR] Client dependencies not installed!
-    echo Please run: cd client ^&^& npm install
-    pause
-    exit /b 1
-)
-
-echo [1/2] Starting Backend Server (Port 5000)...
-start "SwiftPDF Backend" cmd /k "cd server && npm start"
-
-REM Wait a moment for backend to start
-timeout /t 3 /nobreak >nul
-
-echo [2/2] Starting Frontend Client (Port 5173)...
-start "SwiftPDF Frontend" cmd /k "cd client && npm run dev"
-
+REM 2. Start Servers Concurrently
 echo.
-echo ========================================
-echo   Servers Started!
-echo ========================================
+echo [INFO] Starting servers...
+echo frontend: http://localhost:5173
+echo backend:  http://localhost:5000
 echo.
-echo Backend:  http://localhost:5000
-echo Frontend: http://localhost:5173
-echo.
-echo Press Ctrl+C in each terminal window to stop servers
-echo Close this window to continue...
+echo Press Ctrl+C to stop all servers.
 echo.
 
-REM Wait 5 seconds then open browser
-timeout /t 5 /nobreak >nul
-start http://localhost:5173
+npm run dev
 
+echo.
+echo [INFO] Servers stopped.
 pause

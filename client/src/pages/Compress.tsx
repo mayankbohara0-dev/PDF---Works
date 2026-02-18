@@ -4,6 +4,7 @@ import Footer from '../components/Footer';
 import FileUploader from '../components/FileUploader';
 import { Minimize2, ArrowLeft, Download, AlertCircle, Loader, CheckCircle } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import ViralLoop from '../components/ViralLoop';
 import { useMutation } from '@tanstack/react-query';
 import api from '../api';
 import SEO from '../components/SEO';
@@ -167,6 +168,7 @@ const Compress = () => {
                                 >
                                     Download Compressed PDF
                                 </a>
+                                <ViralLoop />
                             </div>
                         )}
 
