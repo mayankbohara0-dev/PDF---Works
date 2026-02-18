@@ -4,6 +4,7 @@ import Footer from '../components/Footer';
 import FileUploader from '../components/FileUploader';
 import { Wrench, ArrowLeft, AlertCircle, Loader, CheckCircle } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import ViralLoop from '../components/ViralLoop';
 import { useMutation } from '@tanstack/react-query';
 import api from '../api';
 import SEO from '../components/SEO';
@@ -121,6 +122,8 @@ const Repair = () => {
                                 PDF repaired successfully! Your download should start automatically.
                             </div>
                         )}
+
+                        {mutation.isSuccess && <ViralLoop />}
                     </div>
 
                     <div className="mt-12 bg-white rounded-3xl p-8 shadow-sm">

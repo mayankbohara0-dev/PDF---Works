@@ -45,7 +45,7 @@ const AdUnit = ({ className = '', slot = 'YOUR_AD_SLOT_ID', format = 'auto', lay
                 <ins
                     className="adsbygoogle"
                     style={{ display: 'block', width: '100%' }}
-                    data-ad-client="ca-pub-8982120361297725"
+                    data-ad-client={import.meta.env.VITE_ADSENSE_PUB_ID}
                     data-ad-slot={slot}
                     data-ad-format={format}
                     data-full-width-responsive="true"

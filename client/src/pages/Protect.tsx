@@ -4,6 +4,7 @@ import Footer from '../components/Footer';
 import FileUploader from '../components/FileUploader';
 import { Shield, ArrowLeft, AlertCircle, Loader, CheckCircle, Lock, Eye, EyeOff } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import ViralLoop from '../components/ViralLoop';
 import { useMutation } from '@tanstack/react-query';
 import api from '../api';
 import SEO from '../components/SEO';
@@ -215,6 +216,8 @@ const Protect = () => {
                                 PDF protected successfully! Keep your password safe.
                             </div>
                         )}
+
+                        {mutation.isSuccess && <ViralLoop />}
                     </div>
                 </div>
             </main>
