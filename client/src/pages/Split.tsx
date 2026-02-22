@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import FileUploader from '../components/FileUploader';
@@ -13,6 +13,10 @@ const Split = () => {
     const [files, setFiles] = useState<(File & { id: string })[]>([]);
     const [ranges, setRanges] = useState('');
     const [downloadUrl, setDownloadUrl] = useState<string | null>(null);
+    const [mount, setMount] = useState(false);
+    const cardRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => { const t = setTimeout(() => setMount(true), 50); return () => clearTimeout(t); }, []);
 
     // Cleanup
     useEffect(() => {
@@ -83,15 +87,15 @@ const Split = () => {
                     </div>
 
                     <div className="text-center mb-10">
-                        <div className="w-20 h-20 bg-purple-50 text-purple-600 rounded-3xl flex items-center justify-center mx-auto mb-6 shadow-soft transform -rotate-3">
+                        <div className={`w-20 h-20 bg-purple-50 text-purple-600 rounded-3xl flex items-center justify-center mx-auto mb-6 shadow-soft transition-all duration-700 ${mount ? 'opacity-100 scale-100 -rotate-3' : 'opacity-0 scale-50 rotate-12'}`}>
                             <Scissors className="w-10 h-10" />
                         </div>
-                        <h1 className="text-4xl lg:text-5xl font-bold mb-4 text-text-main">Split PDF</h1>
-                        <p className="text-lg text-text-body font-medium">Extract specific pages, ranges, or separate documents.</p>
+                        <h1 className={`text-4xl lg:text-5xl font-bold mb-4 text-text-main transition-all duration-700 delay-100 ${mount ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'}`}>Split PDF</h1>
+                        <p className={`text-lg text-text-body font-medium transition-all duration-700 delay-200 ${mount ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>Extract specific pages, ranges, or separate documents.</p>
                     </div>
 
                     {/* Tool Interface */}
-                    <div className="bg-white rounded-[2rem] p-8 md:p-12 shadow-soft border border-gray-100 relative overflow-hidden">
+                    <div ref={cardRef} className={`bg-white rounded-[2rem] p-8 md:p-12 shadow-soft border border-gray-100 relative overflow-hidden transition-all duration-700 delay-300 ${mount ? 'opacity-100 scale-100 translate-y-0' : 'opacity-0 scale-[0.97] translate-y-4'}`}>
 
                         {/* Decorative blob */}
                         <div className="absolute top-0 right-0 w-64 h-64 bg-purple-50 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 pointer-events-none"></div>

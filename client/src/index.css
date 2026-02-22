@@ -43,6 +43,9 @@
   --animate-bounce-slow: bounceSlow 3s infinite;
   --animate-fade-in-up: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
   --animate-spin-slow: spinSlow 20s linear infinite;
+  --animate-shimmer: shimmer 2.2s linear infinite;
+  --animate-wiggle: wiggle 0.6s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+  --animate-pop-in: popIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
 
   @keyframes float {
 
@@ -71,7 +74,7 @@
   @keyframes fadeInUp {
     from {
       opacity: 0;
-      transform: translateY(20px);
+      transform: translateY(24px);
     }
 
     to {
@@ -80,12 +83,126 @@
     }
   }
 
+  @keyframes slideUp {
+    from {
+      opacity: 0;
+      transform: translateY(40px);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes slideInLeft {
+    from {
+      opacity: 0;
+      transform: translateX(-40px);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  @keyframes slideInRight {
+    from {
+      opacity: 0;
+      transform: translateX(40px);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  @keyframes scaleIn {
+    from {
+      opacity: 0;
+      transform: scale(0.92);
+    }
+
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  @keyframes popIn {
+    0% {
+      opacity: 0;
+      transform: scale(0.6);
+    }
+
+    70% {
+      opacity: 1;
+      transform: scale(1.08);
+    }
+
+    100% {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  @keyframes wiggle {
+
+    0%,
+    100% {
+      transform: rotate(0deg);
+    }
+
+    20% {
+      transform: rotate(-6deg);
+    }
+
+    40% {
+      transform: rotate(6deg);
+    }
+
+    60% {
+      transform: rotate(-4deg);
+    }
+
+    80% {
+      transform: rotate(4deg);
+    }
+  }
+
+  @keyframes shimmer {
+    0% {
+      background-position: -200% center;
+    }
+
+    100% {
+      background-position: 200% center;
+    }
+  }
+
   @keyframes spinSlow {
     from {
       transform: rotate(0deg);
     }
+
     to {
       transform: rotate(360deg);
+    }
+  }
+
+  @keyframes pulse-border {
+
+    0%,
+    100% {
+      border-color: var(--color-primary);
+      box-shadow: 0 0 0 0 rgba(0, 102, 255, 0.2);
+    }
+
+    50% {
+      border-color: var(--color-primary);
+      box-shadow: 0 0 0 8px rgba(0, 102, 255, 0);
     }
   }
 }
@@ -112,9 +229,25 @@
 
 @layer components {
 
-  /* Buttons */
+  /* ── Buttons ───────────────────────────────────── */
   .btn-primary {
-    @apply inline-flex items-center justify-center px-8 py-4 font-bold rounded-full text-white bg-primary hover:bg-primary-dark transition-all transform hover:-translate-y-1 hover:shadow-lg shadow-primary/30 active:scale-95;
+    @apply inline-flex items-center justify-center px-8 py-4 font-bold rounded-full text-white bg-primary hover:bg-primary-dark transition-all transform hover:-translate-y-1 hover:shadow-lg shadow-primary/30 active:scale-95 relative overflow-hidden;
+  }
+
+  /* Shimmer sweep on hover */
+  .btn-primary::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(105deg, transparent 40%, rgba(255, 255, 255, 0.25) 50%, transparent 60%);
+    background-size: 200% 100%;
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+
+  .btn-primary:hover::after {
+    opacity: 1;
+    animation: shimmer 0.7s linear forwards;
   }
 
   .btn-accent {
@@ -125,13 +258,97 @@
     @apply inline-flex items-center justify-center px-8 py-4 font-bold rounded-full text-primary bg-white border-2 border-primary/10 hover:border-primary hover:bg-white transition-all transform hover:-translate-y-1 hover:shadow-md active:scale-95;
   }
 
-  /* Cards */
+  /* ── Cards ─────────────────────────────────────── */
   .card-base {
     @apply bg-white rounded-3xl p-8 border border-gray-100 shadow-soft transition-all hover:shadow-xl hover:-translate-y-1;
   }
 
-  /* Inputs */
+  /* ── Inputs ─────────────────────────────────────── */
   .input-base {
     @apply w-full px-6 py-4 rounded-2xl border-2 border-gray-100 bg-gray-50 text-text-main font-bold focus:outline-none focus:border-primary focus:bg-white focus:ring-4 focus:ring-primary/10 transition-all placeholder-gray-400;
+  }
+
+  /* ── Scroll-reveal system ────────────────────────
+     Elements start hidden; IntersectionObserver adds
+     'is-visible' when they enter the viewport.
+  ───────────────────────────────────────────────── */
+  .reveal {
+    opacity: 0;
+    transform: translateY(36px);
+    transition: opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1),
+      transform 0.65s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .reveal.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .reveal-left {
+    opacity: 0;
+    transform: translateX(-36px);
+    transition: opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1),
+      transform 0.65s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .reveal-left.is-visible {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  .reveal-scale {
+    opacity: 0;
+    transform: scale(0.92);
+    transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+      transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .reveal-scale.is-visible {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  /* Stagger delay helpers */
+  .stagger-1 {
+    transition-delay: 0.05s;
+  }
+
+  .stagger-2 {
+    transition-delay: 0.10s;
+  }
+
+  .stagger-3 {
+    transition-delay: 0.15s;
+  }
+
+  .stagger-4 {
+    transition-delay: 0.20s;
+  }
+
+  .stagger-5 {
+    transition-delay: 0.25s;
+  }
+
+  .stagger-6 {
+    transition-delay: 0.30s;
+  }
+
+  .stagger-7 {
+    transition-delay: 0.35s;
+  }
+
+  .stagger-8 {
+    transition-delay: 0.40s;
+  }
+
+  /* ── Tool page icon bounce-in ─────────────────── */
+  .icon-pop {
+    animation: popIn 0.55s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+    animation-delay: 0.1s;
+  }
+
+  /* ── Drag-over pulse ──────────────────────────── */
+  .drag-active-zone {
+    animation: pulse-border 1.2s ease-in-out infinite;
   }
 }

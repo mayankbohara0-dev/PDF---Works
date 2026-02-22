@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import FileUploader from '../components/FileUploader';
@@ -14,12 +14,16 @@ const Protect = () => {
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
+    const [mount, setMount] = useState(false);
+    const cardRef = useRef<HTMLDivElement>(null);
     const [permissions, setPermissions] = useState({
         allowPrint: true,
         allowCopy: false,
         allowModify: false,
         allowAnnotate: true,
     });
+
+    useEffect(() => { const t = setTimeout(() => setMount(true), 50); return () => clearTimeout(t); }, []);
 
     const mutation = useMutation({
         mutationFn: async (params: { file: File; password: string; permissions: typeof permissions }) => {
@@ -87,18 +91,18 @@ const Protect = () => {
                     </Link>
 
                     <div className="text-center mb-12">
-                        <div className="inline-flex items-center justify-center w-20 h-20 bg-red-50 text-red-600 rounded-3xl mb-6 shadow-lg">
+                        <div className={`inline-flex items-center justify-center w-20 h-20 bg-red-50 text-red-600 rounded-3xl mb-6 shadow-lg transition-all duration-700 ${mount ? 'opacity-100 scale-100 rotate-3' : 'opacity-0 scale-50 rotate-12'}`}>
                             <Shield className="w-10 h-10" />
                         </div>
-                        <h1 className="text-4xl lg:text-5xl font-bold mb-4 text-text-main">
+                        <h1 className={`text-4xl lg:text-5xl font-bold mb-4 text-text-main transition-all duration-700 delay-100 ${mount ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'}`}>
                             Protect PDF
                         </h1>
-                        <p className="text-lg text-text-body max-w-2xl mx-auto">
+                        <p className={`text-lg text-text-body max-w-2xl mx-auto transition-all duration-700 delay-200 ${mount ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
                             Secure your PDF with password encryption and control who can print, copy, or modify your document.
                         </p>
                     </div>
 
-                    <div className="card-base">
+                    <div ref={cardRef} className={`card-base transition-all duration-700 delay-300 ${mount ? 'opacity-100 scale-100 translate-y-0' : 'opacity-0 scale-[0.97] translate-y-4'}`}>
                         <FileUploader
                             onFilesSelected={handleFilesSelected}
                             multiple={false}

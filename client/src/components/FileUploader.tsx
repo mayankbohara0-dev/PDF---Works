@@ -9,9 +9,10 @@ interface SortableItemProps {
     id: string;
     file: UploadedFile;
     onRemove: () => void;
+    index: number;
 }
 
-const SortableItem = ({ id, file, onRemove }: SortableItemProps) => {
+const SortableItem = ({ id, file, onRemove, index }: SortableItemProps) => {
     const {
         attributes,
         listeners,
@@ -23,19 +24,20 @@ const SortableItem = ({ id, file, onRemove }: SortableItemProps) => {
     const style = {
         transform: CSS.Transform.toString(transform),
         transition,
+        animationDelay: `${index * 0.06}s`,
     };
 
     return (
         <div
             ref={setNodeRef}
             style={style}
-            className="group flex items-center justify-between p-4 bg-white border border-gray-100 rounded-2xl shadow-sm hover:shadow-md transition-all"
+            className="group flex items-center justify-between p-4 bg-white border border-gray-100 rounded-2xl shadow-sm hover:shadow-md transition-all animate-fade-in-up"
         >
             <div className="flex items-center gap-4 overflow-hidden flex-1">
                 <div {...attributes} {...listeners} className="cursor-grab touch-none text-gray-300 hover:text-primary transition-colors">
                     <GripVertical className="w-5 h-5" />
                 </div>
-                <div className="w-10 h-10 bg-blue-50 text-primary rounded-xl flex items-center justify-center flex-shrink-0 group-hover:bg-primary group-hover:text-white transition-colors">
+                <div className="w-10 h-10 bg-blue-50 text-primary rounded-xl flex items-center justify-center flex-shrink-0 group-hover:bg-primary group-hover:text-white transition-all duration-300 group-hover:scale-110">
                     <FileIcon className="w-5 h-5" />
                 </div>
                 <div className="flex flex-col overflow-hidden">
@@ -45,7 +47,7 @@ const SortableItem = ({ id, file, onRemove }: SortableItemProps) => {
             </div>
             <button
                 onClick={(e) => { e.stopPropagation(); onRemove(); }}
-                className="p-2 hover:bg-red-50 rounded-full text-gray-300 hover:text-red-500 transition-colors"
+                className="p-2 hover:bg-red-50 rounded-full text-gray-300 hover:text-red-500 transition-all hover:scale-110 hover:rotate-90 duration-200"
             >
                 <X className="w-4 h-4" />
             </button>
@@ -98,7 +100,6 @@ const FileUploader: React.FC<FileUploaderProps> = ({ onFilesSelected, multiple =
                 errorMessage = `File size exceeds ${maxSizeInMB}MB limit.`;
                 continue;
             }
-            // Add ID to file object
             (file as any).id = `${file.name}-${Date.now()}-${Math.random()}`;
             validFiles.push(file as UploadedFile);
         }
@@ -179,10 +180,13 @@ const FileUploader: React.FC<FileUploaderProps> = ({ onFilesSelected, multiple =
     return (
         <div className="w-full">
             <div
-                className={`relative border-2 border-dashed rounded-3xl p-10 text-center transition-all cursor-pointer overflow-hidden group
-          ${dragActive ? 'border-primary bg-primary/5' : 'border-gray-200 hover:border-primary hover:bg-gray-50'}
-          ${error ? 'border-red-300 bg-red-50' : ''}
-        `}
+                className={`relative border-2 border-dashed rounded-3xl p-10 text-center cursor-pointer overflow-hidden group
+                    transition-all duration-300
+                    ${dragActive
+                        ? 'border-primary bg-primary/5 scale-[1.02] drag-active-zone'
+                        : 'border-gray-200 hover:border-primary hover:bg-gray-50 hover:scale-[1.01]'}
+                    ${error ? 'border-red-300 bg-red-50' : ''}
+                `}
                 onDragEnter={handleDrag}
                 onDragLeave={handleDrag}
                 onDragOver={handleDrag}
@@ -201,13 +205,19 @@ const FileUploader: React.FC<FileUploaderProps> = ({ onFilesSelected, multiple =
                 {/* Background Decoration */}
                 <div className="absolute top-0 right-0 p-20 bg-gradient-to-br from-primary/5 to-transparent rounded-full -translate-y-1/2 translate-x-1/2 group-hover:scale-110 transition-transform duration-700 pointer-events-none"></div>
 
+                {/* Ripple ring on drag-active */}
+                {dragActive && (
+                    <div className="absolute inset-0 rounded-3xl border-2 border-primary/30 animate-ping pointer-events-none"></div>
+                )}
+
                 <div className="relative z-10 flex flex-col items-center justify-center gap-4">
-                    <div className={`w-16 h-16 rounded-2xl flex items-center justify-center shadow-soft transition-transform group-hover:scale-110 group-hover:-rotate-3 ${dragActive ? 'bg-primary text-white' : 'bg-white text-primary'}`}>
-                        <UploadCloud className="w-8 h-8" />
+                    <div className={`w-16 h-16 rounded-2xl flex items-center justify-center shadow-soft transition-all duration-300 group-hover:scale-110 group-hover:-rotate-3
+                        ${dragActive ? 'bg-primary text-white scale-110 rotate-[-6deg]' : 'bg-white text-primary'}`}>
+                        <UploadCloud className={`w-8 h-8 transition-transform duration-300 ${dragActive ? 'scale-110' : ''}`} />
                     </div>
                     <div>
-                        <p className="text-xl font-bold text-text-main mb-1">
-                            Click to upload or drag and drop
+                        <p className={`text-xl font-bold mb-1 transition-colors duration-200 ${dragActive ? 'text-primary' : 'text-text-main'}`}>
+                            {dragActive ? 'Drop it here!' : 'Click to upload or drag and drop'}
                         </p>
                         <p className="text-sm font-medium text-gray-400">
                             PDF files only (max {maxSizeInMB}MB)
@@ -224,13 +234,13 @@ const FileUploader: React.FC<FileUploaderProps> = ({ onFilesSelected, multiple =
             )}
 
             {files.length > 0 && (
-                <div className="mt-8 space-y-4 animate-fade-in-up">
+                <div className="mt-8 space-y-4">
                     <div className="flex items-center justify-between px-2">
-                        <h4 className="text-sm font-bold uppercase text-gray-400 tracking-wider">
+                        <h4 className="text-sm font-bold uppercase text-gray-400 tracking-wider animate-fade-in-up">
                             Selected Files ({files.length})
                         </h4>
                         {files.length > 1 && (
-                            <span className="text-xs font-semibold text-primary bg-primary/10 px-2 py-1 rounded-lg">
+                            <span className="text-xs font-semibold text-primary bg-primary/10 px-2 py-1 rounded-lg animate-fade-in-up">
                                 Drag to reorder
                             </span>
                         )}
@@ -246,10 +256,14 @@ const FileUploader: React.FC<FileUploaderProps> = ({ onFilesSelected, multiple =
                             strategy={verticalListSortingStrategy}
                         >
                             <div className="space-y-3">
-                                {files.map((file) => (
-                                    <div key={file.id} className="transform transition-all">
-                                        <SortableItem id={file.id} file={file} onRemove={() => removeFile(file.id)} />
-                                    </div>
+                                {files.map((file, index) => (
+                                    <SortableItem
+                                        key={file.id}
+                                        id={file.id}
+                                        file={file}
+                                        onRemove={() => removeFile(file.id)}
+                                        index={index}
+                                    />
                                 ))}
                             </div>
                         </SortableContext>
