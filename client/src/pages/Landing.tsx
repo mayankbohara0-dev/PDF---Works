@@ -215,8 +215,22 @@ const Landing = () => {
     return (
         <div className="min-h-screen bg-secondary font-body overflow-x-hidden">
             <SEO
-                title="Free PDF Tools - Merge, Split, Compress"
-                description="The best free online PDF tools to merge, split, and compress your documents. Secure, fast, and easy to use."
+                title="SwiftPDF | #1 Free Online PDF Tools - Merge, Split, Compress"
+                description="Merge, split, compress, and convert IDs easily with Swift PDF. Fast, free, and secure online PDF tools for all your document needs."
+                canonical="https://swiftpdf.app"
+                schema={{
+                    "@context": "https://schema.org",
+                    "@type": "SoftwareApplication",
+                    "name": "SwiftPDF",
+                    "operatingSystem": "All",
+                    "applicationCategory": "BusinessApplication",
+                    "offers": {
+                        "@type": "Offer",
+                        "price": "0",
+                        "priceCurrency": "USD"
+                    },
+                    "description": "Fast, free, and secure online PDF tools to merge, split, compress, and convert PDF files."
+                }}
             />
             <Navbar />
 

@@ -62,8 +62,21 @@ const ToImage = () => {
     return (
         <div className="min-h-screen flex flex-col bg-secondary font-body">
             <SEO
-                title="PDF to Image Converter - Convert PDF to PNG, JPG, WebP"
-                description="Convert PDF pages to high-quality images in PNG, JPG, or WebP format. Free online PDF to image converter."
+                title="PDF to Image Converter - Convert PDF to PNG, JPG, WebP | SwiftPDF"
+                description="Convert PDF pages to high-quality PNG, JPG, or WebP images instantly. Fast, free, and secure online PDF to image converter."
+                canonical="https://swiftpdf.app/to-image"
+                schema={{
+                    "@context": "https://schema.org",
+                    "@type": "SoftwareApplication",
+                    "name": "SwiftPDF to Image",
+                    "operatingSystem": "All",
+                    "applicationCategory": "BusinessApplication",
+                    "offers": {
+                        "@type": "Offer",
+                        "price": "0",
+                        "priceCurrency": "USD"
+                    }
+                }}
             />
             <Navbar />
 

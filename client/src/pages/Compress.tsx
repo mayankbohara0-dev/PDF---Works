@@ -97,9 +97,40 @@ const Compress = () => {
     return (
         <div className="min-h-screen flex flex-col bg-secondary font-body">
             <SEO
-                title="Compress PDF File Size"
-                description="Reduce PDF file size online for free while maintaining quality. Best PDF compressor."
-                keywords="compress pdf, reduce pdf size, optimize pdf, shrink pdf"
+                title="Compress PDF Online for Free - Reduce PDF File Size | SwiftPDF"
+                description="Shrink your PDF file size while maintaining maximum quality. Fast, free, and secure online PDF compressor. No installation required."
+                keywords="compress pdf, reduce pdf size, optimize pdf, shrink pdf, online pdf compressor"
+                canonical="https://swiftpdf.app/compress"
+                schema={{
+                    "@context": "https://schema.org",
+                    "@type": "SoftwareApplication",
+                    "name": "SwiftPDF Compress",
+                    "operatingSystem": "All",
+                    "applicationCategory": "BusinessApplication",
+                    "offers": {
+                        "@type": "Offer",
+                        "price": "0",
+                        "priceCurrency": "USD"
+                    },
+                    "featureList": "High quality compression, multiple files support, totally free",
+                    "step": [
+                        {
+                            "@type": "HowToStep",
+                            "name": "Upload PDF",
+                            "text": "Select the PDF file you want to compress."
+                        },
+                        {
+                            "@type": "HowToStep",
+                            "name": "Process",
+                            "text": "Click 'Compress Now' to start the optimization."
+                        },
+                        {
+                            "@type": "HowToStep",
+                            "name": "Download",
+                            "text": "Download your compressed PDF file instantly."
+                        }
+                    ]
+                }}
             />
             <Navbar />
 
