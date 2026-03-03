@@ -3,14 +3,14 @@ import { useAuth } from '../context/AuthContext';
 import { ReactNode } from 'react';
 import LoadingSpinner from './LoadingSpinner';
 
-const ProtectedRoute = ({ children }: { children: ReactNode }) => {
+const ProtectedRoute = ({ children, forceAuth = true }: { children: ReactNode; forceAuth?: boolean }) => {
     const { user, loading } = useAuth();
 
     if (loading) {
         return <LoadingSpinner />;
     }
 
-    if (!user) {
+    if (forceAuth && !user) {
         return <Navigate to="/login" />;
     }
 

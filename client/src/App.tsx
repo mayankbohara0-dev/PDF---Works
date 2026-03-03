@@ -41,16 +41,15 @@ function App() {
                 }
               />
               {/* Existing tool routes */}
-              <Route path="/merge" element={<ProtectedRoute><Merge /></ProtectedRoute>} />
-              <Route path="/split" element={<ProtectedRoute><Split /></ProtectedRoute>} />
-              <Route path="/compress" element={<ProtectedRoute><Compress /></ProtectedRoute>} />
-
-              {/* New tool routes */}
-              <Route path="/repair" element={<ProtectedRoute><Repair /></ProtectedRoute>} />
-              <Route path="/to-image" element={<ProtectedRoute><ToImage /></ProtectedRoute>} />
-              <Route path="/protect" element={<ProtectedRoute><Protect /></ProtectedRoute>} />
-              <Route path="/to-word" element={<ProtectedRoute><ToWord /></ProtectedRoute>} />
-              <Route path="/to-excel" element={<ProtectedRoute><ToExcel /></ProtectedRoute>} />
+              {/* Tool routes - now allowing Guest access for better conversion */}
+              <Route path="/merge" element={<ProtectedRoute forceAuth={false}><Merge /></ProtectedRoute>} />
+              <Route path="/split" element={<ProtectedRoute forceAuth={false}><Split /></ProtectedRoute>} />
+              <Route path="/compress" element={<ProtectedRoute forceAuth={false}><Compress /></ProtectedRoute>} />
+              <Route path="/repair" element={<ProtectedRoute forceAuth={false}><Repair /></ProtectedRoute>} />
+              <Route path="/to-image" element={<ProtectedRoute forceAuth={false}><ToImage /></ProtectedRoute>} />
+              <Route path="/protect" element={<ProtectedRoute forceAuth={false}><Protect /></ProtectedRoute>} />
+              <Route path="/to-word" element={<ProtectedRoute forceAuth={false}><ToWord /></ProtectedRoute>} />
+              <Route path="/to-excel" element={<ProtectedRoute forceAuth={false}><ToExcel /></ProtectedRoute>} />
             </Routes>
           </Suspense>
         </AuthProvider>

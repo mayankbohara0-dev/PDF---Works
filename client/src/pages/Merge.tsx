@@ -167,6 +167,48 @@ const Merge = () => {
                             </div>
                         )}
                     </div>
+
+                    {/* SEO Content Enrichment */}
+                    <div className="mt-16 space-y-12 animate-fade-in-up delay-500">
+                        <section>
+                            <h2 className="text-3xl font-bold text-text-main mb-6">How to Merge PDFs for Free?</h2>
+                            <div className="grid md:grid-cols-3 gap-8">
+                                <div className="bg-white p-6 rounded-3xl shadow-sm">
+                                    <div className="w-10 h-10 bg-blue-50 text-primary rounded-xl flex items-center justify-center mb-4 font-bold">1</div>
+                                    <h3 className="font-bold mb-2">Select PDFs</h3>
+                                    <p className="text-sm text-text-body">Upload two or more PDF files from your computer or mobile device.</p>
+                                </div>
+                                <div className="bg-white p-6 rounded-3xl shadow-sm">
+                                    <div className="w-10 h-10 bg-blue-50 text-primary rounded-xl flex items-center justify-center mb-4 font-bold">2</div>
+                                    <h3 className="font-bold mb-2">Combine</h3>
+                                    <p className="text-sm text-text-body">Click the 'Merge' button. Our server combines them into one document instantly.</p>
+                                </div>
+                                <div className="bg-white p-6 rounded-3xl shadow-sm">
+                                    <div className="w-10 h-10 bg-blue-50 text-primary rounded-xl flex items-center justify-center mb-4 font-bold">3</div>
+                                    <h3 className="font-bold mb-2">Download</h3>
+                                    <p className="text-sm text-text-body">Get your merged PDF file immediately. Fast, secure, and no catch!</p>
+                                </div>
+                            </div>
+                        </section>
+
+                        <section className="bg-white rounded-[2rem] p-8 md:p-12 shadow-soft">
+                            <h2 className="text-3xl font-bold text-text-main mb-8">Frequently Asked Questions</h2>
+                            <div className="space-y-6">
+                                <div>
+                                    <h3 className="font-bold text-lg mb-2 text-text-main">Is there a limit to how many PDFs I can merge?</h3>
+                                    <p className="text-text-body">You can merge up to 10 files at once for free. This helps us maintain high processing speeds for everyone.</p>
+                                </div>
+                                <div className="pt-6 border-t border-gray-100">
+                                    <h3 className="font-bold text-lg mb-2 text-text-main">Can I reorder the files before merging?</h3>
+                                    <p className="text-text-body">Yes! Our uploader allows you to see all selected files. Files are merged in the order they were selected/uploaded.</p>
+                                </div>
+                                <div className="pt-6 border-t border-gray-100">
+                                    <h3 className="font-bold text-lg mb-2 text-text-main">Will my merged file be secure?</h3>
+                                    <p className="text-text-body">Absolutely. We use industry-standard encryption and delete all files automatically within 1 hour of processing.</p>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
                 </div>
             </main>
 

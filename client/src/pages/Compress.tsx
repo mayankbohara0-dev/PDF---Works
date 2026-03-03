@@ -234,6 +234,48 @@ const Compress = () => {
                             </div>
                         )}
                     </div>
+
+                    {/* SEO Content Enrichment */}
+                    <div className="mt-16 space-y-12 animate-fade-in-up delay-500">
+                        <section>
+                            <h2 className="text-3xl font-bold text-text-main mb-6">How to Compress PDF Online?</h2>
+                            <div className="grid md:grid-cols-3 gap-8">
+                                <div className="bg-white p-6 rounded-3xl shadow-sm">
+                                    <div className="w-10 h-10 bg-pink-50 text-pink-600 rounded-xl flex items-center justify-center mb-4 font-bold">1</div>
+                                    <h3 className="font-bold mb-2">Upload Files</h3>
+                                    <p className="text-sm text-text-body">Select the PDF document you want to optimize from your device.</p>
+                                </div>
+                                <div className="bg-white p-6 rounded-3xl shadow-sm">
+                                    <div className="w-10 h-10 bg-pink-50 text-pink-600 rounded-xl flex items-center justify-center mb-4 font-bold">2</div>
+                                    <h3 className="font-bold mb-2">Compress</h3>
+                                    <p className="text-sm text-text-body">Click the compress button. Our smart algorithm reduces size while keeping quality.</p>
+                                </div>
+                                <div className="bg-white p-6 rounded-3xl shadow-sm">
+                                    <div className="w-10 h-10 bg-pink-50 text-pink-600 rounded-xl flex items-center justify-center mb-4 font-bold">3</div>
+                                    <h3 className="font-bold mb-2">Download</h3>
+                                    <p className="text-sm text-text-body">Download your lightweight PDF instantly. No registration required!</p>
+                                </div>
+                            </div>
+                        </section>
+
+                        <section className="bg-white rounded-[2rem] p-8 md:p-12 shadow-soft">
+                            <h2 className="text-3xl font-bold text-text-main mb-8">Frequently Asked Questions</h2>
+                            <div className="space-y-6">
+                                <div>
+                                    <h3 className="font-bold text-lg mb-2 text-text-main">Will I lose quality after compression?</h3>
+                                    <p className="text-text-body">Our algorithm is designed to find the perfect balance between file size and visual fidelity. Most users won't notice any difference in quality.</p>
+                                </div>
+                                <div className="pt-6 border-t border-gray-100">
+                                    <h3 className="font-bold text-lg mb-2 text-text-main">Is it safe to upload my files?</h3>
+                                    <p className="text-text-body">Yes. All files are encrypted during transfer and automatically deleted from our servers after processing. We do not store your data.</p>
+                                </div>
+                                <div className="pt-6 border-t border-gray-100">
+                                    <h3 className="font-bold text-lg mb-2 text-text-main">Is there a limit on file size?</h3>
+                                    <p className="text-text-body">Currently, you can upload files up to 100MB for free. For larger files, please sign up for a premium account.</p>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
                 </div>
             </main>
 

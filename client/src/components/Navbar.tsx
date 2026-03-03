@@ -1,15 +1,32 @@
 
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { FileText, Menu, X } from 'lucide-react';
+import { FileText, Menu, X, Search, Layers, Scissors, Minimize2, Wrench, Image as ImageIcon, Shield, FileText as WordIcon, Table } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import ThemeToggle from './ThemeToggle';
+
+const tools = [
+    { icon: Layers, title: 'Merge PDFs', path: '/merge' },
+    { icon: Scissors, title: 'Split PDF', path: '/split' },
+    { icon: Minimize2, title: 'Compress PDF', path: '/compress' },
+    { icon: Wrench, title: 'Repair PDF', path: '/repair' },
+    { icon: ImageIcon, title: 'PDF to Image', path: '/to-image' },
+    { icon: Shield, title: 'Protect PDF', path: '/protect' },
+    { icon: WordIcon, title: 'PDF to Word', path: '/to-word' },
+    { icon: Table, title: 'PDF to Excel', path: '/to-excel' },
+];
 
 const Navbar: React.FC = () => {
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
     const [scrolled, setScrolled] = useState(false);
+    const [searchOpen, setSearchOpen] = useState(false);
+    const [searchQuery, setSearchQuery] = useState('');
     const { user, signOut } = useAuth();
     const navigate = useNavigate();
+
+    const filteredTools = tools.filter(t =>
+        t.title.toLowerCase().includes(searchQuery.toLowerCase())
+    );
 
     // Shrink navbar on scroll
     useEffect(() => {
@@ -90,6 +107,12 @@ const Navbar: React.FC = () => {
 
                     {/* Mobile Toggle */}
                     <div className="md:hidden flex items-center gap-4">
+                        <button
+                            onClick={() => setSearchOpen(!searchOpen)}
+                            className="p-2 text-text-main hover:bg-secondary rounded-full"
+                        >
+                            <Search className="w-5 h-5" />
+                        </button>
                         <ThemeToggle />
                         <button
                             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
@@ -99,6 +122,45 @@ const Navbar: React.FC = () => {
                         </button>
                     </div>
                 </div>
+
+                {/* Search Overlay */}
+                {searchOpen && (
+                    <div className="mt-4 animate-fade-in-up">
+                        <div className="bg-white rounded-3xl shadow-xl border border-gray-100 p-4">
+                            <div className="relative">
+                                <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5" />
+                                <input
+                                    type="text"
+                                    placeholder="Search tools (e.g. compress, merge)..."
+                                    className="w-full bg-secondary border-none rounded-2xl py-3 pl-12 pr-4 font-bold text-text-main focus:ring-2 focus:ring-primary/20"
+                                    autoFocus
+                                    value={searchQuery}
+                                    onChange={(e) => setSearchQuery(e.target.value)}
+                                />
+                            </div>
+                            {searchQuery && (
+                                <div className="mt-4 grid grid-cols-1 gap-2 max-h-[300px] overflow-y-auto">
+                                    {filteredTools.map((tool, idx) => (
+                                        <Link
+                                            key={idx}
+                                            to={tool.path}
+                                            onClick={() => { setSearchOpen(false); setSearchQuery(''); }}
+                                            className="flex items-center gap-4 p-3 hover:bg-primary/5 rounded-2xl transition-colors group"
+                                        >
+                                            <div className="w-10 h-10 bg-secondary group-hover:bg-white rounded-xl flex items-center justify-center transition-colors">
+                                                <tool.icon className="w-5 h-5 text-primary" />
+                                            </div>
+                                            <span className="font-bold text-text-main">{tool.title}</span>
+                                        </Link>
+                                    ))}
+                                    {filteredTools.length === 0 && (
+                                        <p className="text-center py-4 text-gray-400 font-medium">No tools found matching "{searchQuery}"</p>
+                                    )}
+                                </div>
+                            )}
+                        </div>
+                    </div>
+                )}
             </div>
 
             {/* Mobile Menu */}
